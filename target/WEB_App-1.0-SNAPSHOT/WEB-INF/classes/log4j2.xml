@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE xml>
-<Configuration status="WARN">
+<xml status="WARN">
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </Console>
-        <File name="File" fileName="E:\\DEVELOPMENT\\JAVA\\web-logs\\web-college-administration\\applicationLogs.log">
+        <File name="File" fileName="../logs/logs.log">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </File>
     </Appenders>
@@ -15,4 +15,4 @@
             <AppenderRef ref="File"/>
         </Root>
     </Loggers>
-</Configuration>
+</xml>
