@@ -1,9 +1,11 @@
-package com.example.WEB_App.service;
+package com.example.WEB_App.util;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
 public class Encryptor {
+
         public static String encrypt(String pass) {
             MessageDigest messageDigest = null;
             byte[] bytesEncoded = null;
@@ -18,6 +20,4 @@ public class Encryptor {
             String resHex = bigInt.toString(16);
             return resHex;
         }
-
-
 }

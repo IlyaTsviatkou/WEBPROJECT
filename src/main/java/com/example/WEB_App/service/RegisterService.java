@@ -2,10 +2,10 @@ package com.example.WEB_App.service;
 
 import com.example.WEB_App.dao.impl.UserDaoImpl;
 import com.example.WEB_App.entity.CustomUser;
+import com.example.WEB_App.util.Encryptor;
 import com.example.WEB_App.validation.Validation;
 
 import java.sql.SQLException;
-import java.util.Optional;
 
 public class RegisterService {
 
