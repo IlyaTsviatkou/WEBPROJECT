@@ -10,9 +10,9 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 public class LoginService {
-
+    UserDaoImpl dao = new UserDaoImpl();
     public Optional<CustomUser> login(String login, String password) throws SQLException, DaoException {
-        UserDaoImpl dao = new UserDaoImpl();//todo where should i check if user is null????
+        //todo where should i check if user is null????
         Optional<CustomUser> user = Optional.empty();
         if(Validation.isValidPassword(password) && Validation.isValidLogin(login)) {
             String encryptedPass = Encryptor.encrypt(password);

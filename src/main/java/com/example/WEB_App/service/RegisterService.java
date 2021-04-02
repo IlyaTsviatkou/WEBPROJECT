@@ -8,10 +8,9 @@ import com.example.WEB_App.validation.Validation;
 import java.sql.SQLException;
 
 public class RegisterService {
-
+    UserDaoImpl dao = new UserDaoImpl();
     public boolean register(CustomUser user) throws SQLException, ClassNotFoundException {
         boolean result = true;
-        UserDaoImpl dao = new UserDaoImpl();
         if(Validation.isValidPassword(user.getPassword()) && Validation.isValidLogin(user.getLogin())) {
             String encryptedPass = Encryptor.encrypt(user.getPassword());
             user.setPassword(encryptedPass);

@@ -12,15 +12,13 @@ import java.util.List;
 import java.util.Optional;
 
 public class SortService {
-
+    UserDaoImpl dao = new UserDaoImpl();
 
     public List<CustomUser> findAllUsers() throws DaoException {
-        UserDaoImpl dao = new UserDaoImpl();
         return dao.findAllUsers();
     }
 
     public List<CustomUser> findUsersByName(String userName) throws DaoException {
-        UserDaoImpl dao = new UserDaoImpl();
         return dao.findUsersByName(userName);
     }
 }
