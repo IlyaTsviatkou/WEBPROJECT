@@ -3,12 +3,11 @@ package com.example.WEB_App.command;
 import com.example.WEB_App.command.impl.LoginCommand;
 import com.example.WEB_App.command.impl.NoCommand;
 import com.example.WEB_App.command.impl.RegisterCommand;
-import com.example.WEB_App.command.impl.SortCommand;
+import com.example.WEB_App.command.impl.FindAllUsersCommand;
 import com.example.WEB_App.service.LoginService;
 import com.example.WEB_App.service.RegisterService;
 import com.example.WEB_App.service.SortService;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.EnumMap;
 
 public class RequestHelper {
@@ -17,7 +16,7 @@ public class RequestHelper {
             new EnumMap<>(CommandType.class);
     private RequestHelper() {
         commands.put(CommandType.LOGIN, new LoginCommand(new LoginService()));
-        commands.put(CommandType.SORT_BY_ID, new SortCommand(new SortService()));
+        commands.put(CommandType.FIND_ALL_USERS, new FindAllUsersCommand(new SortService()));
         commands.put(CommandType.REGISTER, new RegisterCommand(new RegisterService()));
     }
     public Command getCommand(String commandName ) {

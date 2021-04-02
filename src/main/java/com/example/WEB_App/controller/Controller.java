@@ -15,8 +15,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 
-@WebServlet(/*name = "helloServlet", value = "/hello-servlet" ,*/ urlPatterns = "/hello-servlet")
-public class HelloServlet extends HttpServlet {
+@WebServlet(name = "controller",urlPatterns = "/controller")
+public class Controller extends HttpServlet {
     private static final Logger logger = LogManager.getLogger();
     private static final String PARAM_NAME_COMMAND = "command";
     private String message;
@@ -35,6 +35,7 @@ public class HelloServlet extends HttpServlet {
         out.println("<html><body>");
         out.println("<h1>" + message + "</h1>");
         out.println("</body></html>");
+        //throw new IOException();
     }
 
     @Override

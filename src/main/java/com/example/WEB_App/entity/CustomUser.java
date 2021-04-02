@@ -16,6 +16,9 @@ public class CustomUser {
         this.id = id;
     }
 
+    public CustomUser() {
+    }
+
     public String getInformation() {
         return information;
     }

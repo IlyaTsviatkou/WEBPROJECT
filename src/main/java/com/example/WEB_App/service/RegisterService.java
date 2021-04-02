@@ -1,9 +1,8 @@
 package com.example.WEB_App.service;
 
+import com.example.WEB_App.dao.impl.UserDaoImpl;
 import com.example.WEB_App.entity.CustomUser;
-import com.example.WEB_App.repository.Repository;
-import com.example.WEB_App.repository.impl.LoginSpecification;
-import com.example.WEB_App.samples.DatabaseHandler;
+import com.example.WEB_App.validation.Validation;
 
 import java.sql.SQLException;
 import java.util.Optional;
@@ -12,12 +11,18 @@ public class RegisterService {
 
     public boolean register(CustomUser user) throws SQLException, ClassNotFoundException {
         boolean result = true;
-        DatabaseHandler db = new DatabaseHandler();
-        try {
-            db.singUpUser(user);
-        }catch (Exception e) {
-            e.printStackTrace();
-            result = false;
+        UserDaoImpl dao = new UserDaoImpl();
+        if(Validation.isValidPassword(user.getPassword()) && Validation.isValidLogin(user.getLogin())) {
+            String encryptedPass = Encryptor.encrypt(user.getPassword());
+            user.setPassword(encryptedPass);
+            try {
+                dao.register(user);
+            } catch (Exception e) {
+                e.printStackTrace();
+                result = false;
+            }
+        } else {
+           result = false;
         }
         return result;
     }
