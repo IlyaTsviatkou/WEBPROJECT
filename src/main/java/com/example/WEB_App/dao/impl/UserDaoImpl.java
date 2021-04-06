@@ -1,6 +1,5 @@
 package com.example.WEB_App.dao.impl;
 
-import com.example.WEB_App.dao.ConnectionCreator;
 import com.example.WEB_App.dao.Const;
 import com.example.WEB_App.dao.UserDao;
 import com.example.WEB_App.entity.CustomUser;

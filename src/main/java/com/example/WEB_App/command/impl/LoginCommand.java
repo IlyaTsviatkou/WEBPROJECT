@@ -31,10 +31,7 @@ public class LoginCommand implements Command {
         String login = request.getParameter(PARAM_NAME_LOGIN);
         String pass = request.getParameter(PARAM_NAME_PASSWORD);
         Optional<CustomUser> user = Optional.empty();
-        try {
-            user = loginService.login(login, pass);
-        }catch (SQLException | DaoException e) { // fixme what should i do here(exception/error page/or use throws on method)
-        }
+        user = loginService.login(login, pass);
         if (user.isPresent()) {
             request.setAttribute(ATTRIBUTE_NAME_USER, user.get());
             page = ConfigurationManager.getProperty("path.page.profile");

@@ -12,14 +12,18 @@ import java.util.Queue;
 import java.util.ResourceBundle;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
-public class CustomConnectionPool {
+public class CustomConnectionPool { //fixme add some logs
     private static final Logger logger = LogManager.getLogger();
+    private static boolean isCreated;
+    private static Lock locker = new ReentrantLock(true);
     private static final ResourceBundle bundle;
     private static final String BUNDLE_NAME = "database";
     private static final String DB_POOLSIZE = "db.poolsize";
     private static final int POOL_SIZE;
-    private static CustomConnectionPool instance = new CustomConnectionPool();
+    private static CustomConnectionPool instance = null;
     private BlockingQueue<Connection> freeConnection;
     private Queue<Connection> givenAwayConnection;
 
@@ -34,7 +38,7 @@ public class CustomConnectionPool {
         givenAwayConnection = new ArrayDeque<Connection>();
         try {
             for (int i = 0; i < POOL_SIZE; i++) {
-                Connection connection = ConnectionCreator.getConnection();
+                Connection connection = ConnectionCreator.createConnection();
                 freeConnection.add(connection);
             }
         } catch (SQLException e) {
@@ -43,8 +47,13 @@ public class CustomConnectionPool {
     }
 
     public static CustomConnectionPool getInstance() throws SQLException {
-        if(instance == null) {
-            instance = new CustomConnectionPool();
+        if(!isCreated) {
+            locker.lock();
+            if(instance == null) {
+                instance = new CustomConnectionPool();
+                isCreated=true;
+            }
+            locker.unlock();
         }
         return instance;
     }
@@ -62,9 +71,13 @@ public class CustomConnectionPool {
     }
 
     public void releaseConnection(Connection connection) {
-        if(connection.getClass() == ProxyConnection.class) {
-            givenAwayConnection.remove(connection);
-            freeConnection.offer(connection);
+        if(connection.getClass() == ProxyConnection.class && givenAwayConnection.remove(connection)) {
+            try {
+                freeConnection.put(connection);
+            } catch (InterruptedException e) {
+                logger.log(Level.WARN,e.getMessage());
+                e.printStackTrace();
+            }
         }
     }
 

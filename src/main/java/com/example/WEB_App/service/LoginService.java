@@ -11,12 +11,18 @@ import java.util.Optional;
 
 public class LoginService {
     UserDaoImpl dao = new UserDaoImpl();
-    public Optional<CustomUser> login(String login, String password) throws SQLException, DaoException {
+    public Optional<CustomUser> login(String login, String password)  {
         //todo where should i check if user is null????
         Optional<CustomUser> user = Optional.empty();
         if(Validation.isValidPassword(password) && Validation.isValidLogin(login)) {
             String encryptedPass = Encryptor.encrypt(password);
-            user = dao.login(login, encryptedPass);
+            try {
+                user = dao.login(login, encryptedPass);
+            } catch (DaoException e) {
+                e.printStackTrace();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
         return user;
     }
