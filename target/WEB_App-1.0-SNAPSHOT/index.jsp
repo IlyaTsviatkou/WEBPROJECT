@@ -1,36 +1,45 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" errorPage="pages/error.jsp"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" errorPage="pages/error.jsp" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<fmt:setLocale value="${locale}" scope="session"/>
+<fmt:setBundle basename="resources.pagecontent"/>
 <!DOCTYPE html>
 <html>
+<style>
+
+</style>
 <head>
-    <title>JSP - Hello World</title>
+    <title>TOPofTOPs</title>
 </head>
 <body>
 <h1>"WEB APP!"
 </h1>
+
+Кодировка запроса: ${ pageContext.request.characterEncoding }
 <br/>
-<form name="loginForm" action="controller" method="post">
-    <input type="hidden" name="command" value="login" />
-    <input type="text" name="login" value="" placeholder="login" required pattern="^(?=[A-Za-z])[A-Za-z\d\_]{5,}$">
-    <input type="password" name="password" value="" placeholder="password" required pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$">
-    <br/>
-    <input type="submit" name="submit" value="login">
-</form>
+Локализация: ${sessionScope.locale}
 <br/>
+<br/>
+<div>
+    <form name="toLoginPage" action="controller" method="post">
+        <input type="hidden" name="command" value="to_login_page">
+        <input type="submit" name="submit" value="<fmt:message key="label.login"/>">
+    </form>
+    <form name="toRegisterPage" action="controller" method="post">
+        <input type="hidden" name="command" value="to_register_page">
+        <input type="submit" name="submit" value="<fmt:message key="label.register"/>">
+    </form>
+</div>
 <form name="sortForm" action="controller" method="post">
-    <input type="hidden" name="command" value="find_all_users" />
-    <input type="submit" name="submit" value="ShowALl">
+    <input type="hidden" name="command" value="find_all_users"/>
+    <input type="submit" name="submit" value="<fmt:message key="label.showall"/>">
 </form>
 <br/>
-<br/>
-<form name="registerForm" action="controller" method="post">
-    <input type="hidden" name="command" value="register" />
-    <input type="text" name="login" value="" placeholder="login" required pattern="^(?=[A-Za-z])[A-Za-z\d\_]{5,}$">
-    <input type="password" name="password" value="" placeholder="password" required pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$">
-    <input type="text" name="information" value="" placeholder="information">
-    <br/>
-    <input type="submit" name="submit" value="register">
+<form name="changeLocal" action="controller" method="post">
+    <p><b><fmt:message key="label.your_language"/></b></p>
+    <input type="hidden" name="command" value="change_local"/>
+    <p><input name="language" type="radio" value="rus"> <fmt:message key="label.Russian"/> </p>
+    <p><input name="language" type="radio" value="eng"> <fmt:message key="label.English"/> </p>
+    <p><input type="submit" value="<fmt:message key="label.submit"/>"></p>
 </form>
-<hr/>
-<a href="controller">LOGGER TEST</a>
 </body>
 </html>

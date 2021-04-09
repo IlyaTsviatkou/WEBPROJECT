@@ -42,7 +42,7 @@ public class CustomConnectionPool { //fixme add some logs
                 freeConnection.add(connection);
             }
         } catch (SQLException e) {
-            logger.log(Level.WARN,"cant connect with db");
+            logger.log(Level.WARN,"cant connect with db" + e);
         }
     }
 
