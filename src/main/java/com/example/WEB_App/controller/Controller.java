@@ -2,8 +2,8 @@ package com.example.WEB_App.controller;
 
 
 
-import com.example.WEB_App.command.Command;
-import com.example.WEB_App.command.RequestHelper;
+import com.example.WEB_App.controller.command.Command;
+import com.example.WEB_App.controller.command.RequestHelper;
 import com.example.WEB_App.resource.ConfigurationManager;
 import com.example.WEB_App.resource.MessageManager;
 import org.apache.logging.log4j.LogManager;

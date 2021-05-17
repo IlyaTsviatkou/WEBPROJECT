@@ -6,7 +6,8 @@ public class CustomUser {
     private long id;
     private String login;
     private String password;
-    private String information;
+    private String email;
+    private int role;
 
     public long getId() {
         return id;
@@ -19,23 +20,24 @@ public class CustomUser {
     public CustomUser() {
     }
 
-    public String getInformation() {
-        return information;
+    public String getEmail() {
+        return email;
     }
 
-    public void setInformation(String information) {
-        this.information = information;
+    public void setEmail(String information) {
+        this.email = information;
     }
 
-    public CustomUser(long id, String login, String password , String information) {
+    public CustomUser(long id, String login, String password , String email, int role) {
         this.id = id;
         this.login = login;
         this.password = password;
-        this.information = information;
+        this.email = email;
+        this.role = role;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(Object o) {//fixme without Objects and add tostring
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CustomUser user = (CustomUser) o;
@@ -65,5 +67,13 @@ public class CustomUser {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
     }
 }

@@ -14,10 +14,9 @@
 <br/>
 <form name="registerForm" action="controller" method="post">
     <input type="hidden" name="command" value="register" />
-    <input type="text" name="login" value="" placeholder="login" required pattern="^(?=[A-Za-z])[A-Za-z\d\_]{5,}$">
-    <input type="password" name="password" value="" placeholder="password" required pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$">
-    <input type="text" name="email" value="" placeholder="email" >
-    <input type="text" name="information" value="" placeholder="information">
+    <input type="text" name="login" value="" placeholder="login"  required pattern="^(?=[A-Za-z])[A-Za-z\d\_]{5,20}$">
+    <input type="password" name="password" value="" placeholder="password" required pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,30}$">
+    <input type="text" name="email" value="" placeholder="email" maxlength="100" >
     <br/>
     <input type="submit" name="submit" value="register">
 </form>

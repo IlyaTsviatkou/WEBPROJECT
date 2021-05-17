@@ -17,7 +17,7 @@
     <tr>
         <td><c:out value="${elem.getId()}" /></td>
         <td><c:out value="${elem.getLogin()}" /></td>
-        <td><c:out value="${elem.getInformation()}" /></td>
+        <td><c:out value="${elem.getEmail()}" /></td>
     </tr>
 </c:forEach>
 </table>

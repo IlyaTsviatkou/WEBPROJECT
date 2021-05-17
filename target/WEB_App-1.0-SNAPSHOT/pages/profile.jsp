@@ -11,9 +11,9 @@
     <title></title>
     <h2>id = ${user.getId()}</h2>
     <h3>Login : ${user.getLogin()}</h3>
-    <h3>information : ${user.getInformation()}</h3>
+    <h3>information : ${user.getEmail()}</h3>
 </head>
 <body>
-
+<a href="/WEB_App_war_exploded/">home page</a>
 </body>
 </html>
