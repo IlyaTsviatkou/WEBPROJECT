@@ -1,6 +1,7 @@
 package com.example.WEB_App.controller.command.impl;
 
 import com.example.WEB_App.controller.command.Command;
+import com.example.WEB_App.controller.command.Router;
 import com.example.WEB_App.entity.Item;
 import com.example.WEB_App.entity.Top;
 import com.example.WEB_App.model.service.ItemService;
@@ -20,7 +21,8 @@ public class ToTopPageCommand implements Command {
         this.topService = topService;
     }
     @Override
-    public String execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) {
+        Router router;
         String page;
         Optional<Top> optionalTop = topService.findByTitle(request.getParameter(PARAM_NAME_TITLE));
         Top top;
@@ -34,6 +36,7 @@ public class ToTopPageCommand implements Command {
         } else {
             page = ConfigurationManager.getProperty("path.index");
         }
-        return page;
+        router = new Router(page, Router.RouteType.FORWARD);
+        return router;
     }
 }

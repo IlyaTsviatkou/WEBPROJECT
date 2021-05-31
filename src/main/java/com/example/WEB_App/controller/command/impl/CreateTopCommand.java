@@ -1,6 +1,7 @@
 package com.example.WEB_App.controller.command.impl;
 
 import com.example.WEB_App.controller.command.Command;
+import com.example.WEB_App.controller.command.Router;
 import com.example.WEB_App.entity.CustomUser;
 import com.example.WEB_App.entity.Top;
 import com.example.WEB_App.model.service.CreateTopService;
@@ -22,7 +23,8 @@ public class CreateTopCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) {
+        Router router;
         String page = null;
         CustomUser user = (CustomUser) request.getSession().getAttribute("user");
         String title = request.getParameter(PARAM_NAME_TITLE);
@@ -38,6 +40,7 @@ public class CreateTopCommand implements Command {
            // request.setAttribute(ATTRIBUTE_NAME_ERROR_LOGIN, MessageManager.getProperty("message.errorlogin"));
             page = ConfigurationManager.getProperty("path.index");
         }
-        return page;
+        router = new Router(page, Router.RouteType.REDIRECT);
+        return router;
     }
 }

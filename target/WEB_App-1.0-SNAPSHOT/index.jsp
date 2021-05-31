@@ -23,7 +23,6 @@
 <br/>
 <br/>
 <div>
-    <fmt:message key="label.login"/>
     <form name="toLoginPage" action="controller" method="post">
         <input type="hidden" name="command" value="to_login_page">
         <input type="submit" name="submit" value="<fmt:message key="label.login"/>">

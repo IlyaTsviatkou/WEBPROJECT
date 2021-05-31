@@ -1,6 +1,7 @@
 package com.example.WEB_App.controller.command.impl;
 
 import com.example.WEB_App.controller.command.Command;
+import com.example.WEB_App.controller.command.Router;
 import com.example.WEB_App.entity.CustomUser;
 import com.example.WEB_App.resource.ConfigurationManager;
 import com.example.WEB_App.resource.MessageManager;
@@ -24,7 +25,8 @@ public class LoginCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) {
+        Router router;
         String page = null;
         String login = request.getParameter(PARAM_NAME_LOGIN);
         String pass = request.getParameter(PARAM_NAME_PASSWORD);
@@ -39,6 +41,7 @@ public class LoginCommand implements Command {
             request.setAttribute(ATTRIBUTE_NAME_ERROR_LOGIN, MessageManager.getProperty("message.errorlogin"));
             page = ConfigurationManager.getProperty("path.index");
         }
-        return page;
+        router = new Router(page, Router.RouteType.REDIRECT);
+        return router;
     }
 }

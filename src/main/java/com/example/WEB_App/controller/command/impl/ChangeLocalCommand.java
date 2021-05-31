@@ -1,6 +1,7 @@
 package com.example.WEB_App.controller.command.impl;
 
 import com.example.WEB_App.controller.command.Command;
+import com.example.WEB_App.controller.command.Router;
 import com.example.WEB_App.resource.ConfigurationManager;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,7 +12,8 @@ public class ChangeLocalCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) {
+        Router router;
         String page = ConfigurationManager.getProperty("path.index"); //fixme mby try to take url from session
         HttpSession session = request.getSession();
         String lang = request.getParameter("language");
@@ -20,6 +22,7 @@ public class ChangeLocalCommand implements Command {
         } else if (lang.equals("eng")) {
             session.setAttribute("locale","en_US");
         }
-        return page;
+        router = new Router(page, Router.RouteType.REDIRECT);
+        return router;
     }
 }

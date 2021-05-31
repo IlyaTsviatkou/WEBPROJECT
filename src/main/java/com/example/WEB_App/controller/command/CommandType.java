@@ -15,4 +15,5 @@ public enum CommandType {
     CREATE_ITEM,
     TO_TOP_PAGE,
     DELETE_ITEM,
+    CONFIRM_REGISTRATION,
 }

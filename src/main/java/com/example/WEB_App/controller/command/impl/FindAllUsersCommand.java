@@ -1,6 +1,7 @@
 package com.example.WEB_App.controller.command.impl;
 
 import com.example.WEB_App.controller.command.Command;
+import com.example.WEB_App.controller.command.Router;
 import com.example.WEB_App.entity.CustomUser;
 import com.example.WEB_App.exception.DaoException;
 import com.example.WEB_App.resource.ConfigurationManager;
@@ -22,7 +23,8 @@ public class FindAllUsersCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) {
+        Router router;
         String page = null;
         ArrayList<CustomUser> users = null;
         try {
@@ -32,6 +34,7 @@ public class FindAllUsersCommand implements Command {
         }
         request.setAttribute(ATTRIBUTE_NAME_USER, users);
         page = ConfigurationManager.getProperty("path.page.sort");
-        return page;
+        router = new Router(page, Router.RouteType.FORWARD);
+        return router;
     }
 }

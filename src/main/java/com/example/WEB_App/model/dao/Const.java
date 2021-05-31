@@ -9,6 +9,7 @@ public class Const {
     public static final String COLUMN_USER_PASSWORD = "password";
     public static final String COLUMN_USER_EMAIL = "email";
     public static final String COLUMN_USER_ROLE = "role";
+    public static final String COLUMN_USER_STATUS = "status";
     public static final String COLUMN_TOP_TITLE = "title";
     public static final String COLUMN_TOP_ID = "id";
     public static final String COLUMN_TOP_USER = "user";

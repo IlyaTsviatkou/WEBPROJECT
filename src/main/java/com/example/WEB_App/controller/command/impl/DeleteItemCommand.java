@@ -1,6 +1,7 @@
 package com.example.WEB_App.controller.command.impl;
 
 import com.example.WEB_App.controller.command.Command;
+import com.example.WEB_App.controller.command.Router;
 import com.example.WEB_App.entity.Item;
 import com.example.WEB_App.entity.Top;
 import com.example.WEB_App.model.service.ItemService;
@@ -25,7 +26,8 @@ public class DeleteItemCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) {
+        Router router;
         String page = ConfigurationManager.getProperty("path.page.top");
         long topId = Long.parseLong(request.getParameter(PARAM_NAME_TOP));
         long itemId = Long.parseLong(request.getParameter(PARAM_NAME_ITEM));
@@ -34,6 +36,9 @@ public class DeleteItemCommand implements Command {
         ArrayList<Item> items = itemService.find(topId);//fixme idk how to do it right
         top.setItems(items);
         request.setAttribute("top",top);
-        return page;
+        router = new Router(page, Router.RouteType.FORWARD);
+        return router;
+
+
     }
 }

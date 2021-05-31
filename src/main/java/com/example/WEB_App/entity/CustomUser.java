@@ -8,6 +8,15 @@ public class CustomUser {
     private String password;
     private String email;
     private int role;
+    private int status;
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
     public long getId() {
         return id;
@@ -28,12 +37,13 @@ public class CustomUser {
         this.email = information;
     }
 
-    public CustomUser(long id, String login, String password , String email, int role) {
+    public CustomUser(long id, String login, String password , String email, int role , int status) {
         this.id = id;
         this.login = login;
         this.password = password;
         this.email = email;
         this.role = role;
+        this.status =status;
     }
 
     @Override
@@ -49,7 +59,8 @@ public class CustomUser {
         int temp =31;
         int result = (int) (temp * id)
                 + temp * login.length()
-                + temp * password.length();
+                + temp * password.length()
+                + temp * status;
         return result;
     }
 

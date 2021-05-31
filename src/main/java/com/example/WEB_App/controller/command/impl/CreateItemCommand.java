@@ -1,12 +1,15 @@
 package com.example.WEB_App.controller.command.impl;
 
 import com.example.WEB_App.controller.command.Command;
+import com.example.WEB_App.controller.command.Router;
 import com.example.WEB_App.entity.Item;
 import com.example.WEB_App.entity.Top;
+import com.example.WEB_App.exception.ServiceException;
 import com.example.WEB_App.model.service.ItemService;
 import com.example.WEB_App.model.service.TopService;
 import com.example.WEB_App.resource.ConfigurationManager;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 
@@ -24,7 +27,8 @@ public class CreateItemCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) {
+        Router router;
         String page = ConfigurationManager.getProperty("path.page.top");//fixme
         long id = Long.parseLong(request.getParameter(PARAM_NAME_TOP));
         Top top = (Top) topService.findById(id).get();
@@ -36,7 +40,8 @@ public class CreateItemCommand implements Command {
         itemService.create(item);
         ArrayList<Item> items = itemService.find(top.getId());//fixme idk how to do it right
         top.setItems(items);
-        request.setAttribute("top",top);
-        return page;
+        request.setAttribute("top", top);
+        router = new Router(page, Router.RouteType.REDIRECT);
+        return router;
     }
 }

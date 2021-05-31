@@ -16,7 +16,7 @@
     <input type="hidden" name="command" value="register" />
     <input type="text" name="login" value="" placeholder="login"  required pattern="^(?=[A-Za-z])[A-Za-z\d\_]{5,20}$">
     <input type="password" name="password" value="" placeholder="password" required pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,30}$">
-    <input type="text" name="email" value="" placeholder="email" maxlength="100" >
+    <input type="text" name="email" value="" placeholder="email" maxlength="100" required pattern="^[\w-\+]+(\.[\w-]+)*@[a-zA-Z\d-]+(\.[a-zA-Z\d]+)*(\.[a-zA-Z]{2,})$">
     <br/>
     <input type="submit" name="submit" value="register">
 </form>

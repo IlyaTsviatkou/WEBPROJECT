@@ -16,4 +16,6 @@ public interface UserDao {
     List<CustomUser> findUsersByName(String userName) throws DaoException,SQLException;
 
     List<CustomUser> findAllUsers() throws DaoException,SQLException;
+
+    boolean updateStatus(long id, int statusTo, int statusFrom) throws DaoException,SQLException;
 }

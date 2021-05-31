@@ -12,7 +12,7 @@ public class RequestHelper {
     private RequestHelper() {
         commands.put(CommandType.LOGIN, new LoginCommand(new LoginService()));
         commands.put(CommandType.FIND_ALL_USERS, new FindAllUsersCommand(new SortService()));
-        commands.put(CommandType.REGISTER, new RegisterCommand(new RegisterService()));
+        commands.put(CommandType.REGISTER, new RegisterCommand(new UserService()));
         commands.put(CommandType.TO_REGISTER_PAGE, new ToRegisterPageCommand());
         commands.put(CommandType.TO_LOGIN_PAGE, new ToLoginPageCommand());
         commands.put(CommandType.CHANGE_LOCAL, new ChangeLocalCommand());
@@ -21,6 +21,7 @@ public class RequestHelper {
         commands.put(CommandType.CREATE_ITEM, new CreateItemCommand(new ItemService(),new TopService()));
         commands.put(CommandType.TO_TOP_PAGE, new ToTopPageCommand(new ItemService(), new TopService()));
         commands.put(CommandType.DELETE_ITEM, new DeleteItemCommand(new ItemService(), new TopService()));
+        commands.put(CommandType.CONFIRM_REGISTRATION, new ConfirmRegistrationCommand(new UserService()));
     }
     public Command getCommand(String commandName ) {
         CommandType enumCommandName = CommandType.valueOf(commandName.toUpperCase());

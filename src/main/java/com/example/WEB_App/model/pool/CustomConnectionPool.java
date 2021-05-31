@@ -1,12 +1,15 @@
 package com.example.WEB_App.model.pool;
 
+import com.example.WEB_App.exception.ConnectionPoolException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
+import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Enumeration;
 import java.util.ResourceBundle;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -91,12 +94,16 @@ public class CustomConnectionPool {
     }
 
     public void deregisterDrivers() {
-        DriverManager.getDrivers().asIterator().forEachRemaining(driver -> {
+        Enumeration<Driver> drivers = DriverManager.getDrivers();
+        while (drivers.hasMoreElements()) {
+            Driver driver = drivers.nextElement();
             try {
                 DriverManager.deregisterDriver(driver);
-            }catch (SQLException e) {
-                logger.log(Level.WARN,e.getMessage());
+            } catch (SQLException e) {
+                logger.log(Level.FATAL,"driver deregistration error", e);
             }
-        });
+        }
+
+
     }
 }
