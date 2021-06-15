@@ -16,9 +16,11 @@
 
 </head>
 <body>
-ID : ${top.getId()}
+<%--fixme get path from resources--%>
+<img src="${pageContext.request.contextPath}/upload?imageName=${top.getImage()}" height="50" width="50" alt="${top.getImage()}">
+Title : ${top.getTitle()}
 DESCRIPTION : ${top.getDescription()}
-IMAGE : ${top.getImage()}
+
 </br>
 </br>
 <form name="topForm" action="controller" method="post">

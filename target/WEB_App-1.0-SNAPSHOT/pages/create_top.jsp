@@ -12,12 +12,12 @@
 </head>
 <body>
 <br/>
-<form name="createTopForm" action="controller" method="post">
+<form name="createTopForm" action="upload" method="post" enctype="multipart/form-data">
     <input type="hidden" name="command" value="create_top" />
-    <input type="text" name="title" value="" placeholder="title"maxlength="45" required >
+    <input type="text" name="title" value="" placeholder="title" maxlength="45" required >
     <input type="text" name="description" value="" placeholder="description" maxlength="200" >
     <label for="file">Choose file to upload</label>
-    <input type="file" id="file" name="file" multiple>
+    <input type="file" id="file" name="imageName" >
     <br/>
     <input type="submit" name="submit" value="create">
 </form>

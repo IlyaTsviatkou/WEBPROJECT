@@ -21,7 +21,7 @@
 
     <filter>
         <filter-name>encodingfilter</filter-name>
-        <filter-class>com.example.WEB_App.controller.filter.EncodingFilter</filter-class>
+        <filter-class>com.example.topoftops.controller.filter.EncodingFilter</filter-class>
         <init-param>
             <param-name>encoding</param-name>
             <param-value>UTF-8</param-value>
