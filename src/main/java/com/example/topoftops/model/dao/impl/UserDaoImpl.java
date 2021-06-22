@@ -1,6 +1,5 @@
 package com.example.topoftops.model.dao.impl;
 
-import com.example.topoftops.model.dao.ColumnName;
 import com.example.topoftops.model.dao.UserDao;
 import com.example.topoftops.entity.CustomUser;
 import com.example.topoftops.exception.DaoException;
@@ -18,46 +17,47 @@ import static com.example.topoftops.model.dao.ColumnName.*;
 
 public class UserDaoImpl implements UserDao { //todo result and statement to try or close it
     private static final Logger logger = LogManager.getLogger();
-    private static final String SQL_SELECT_LOGIN = "SELECT * FROM " +  USER_TABLE + " WHERE " +
-             COLUMN_USER_LOGIN + "=? AND " +
-             COLUMN_USER_PASSWORD + "=?" ;
-    private static final String SQL_INSERT_REGISTER = "INSERT INTO " +  USER_TABLE + " (" +
-             COLUMN_USER_LOGIN + "," +  COLUMN_USER_PASSWORD + "," +
-             COLUMN_USER_EMAIL + "," +  COLUMN_USER_ROLE + "," +
-             COLUMN_USER_STATUS + ")" +
-            "VALUES(?,?,?,?,?)" + " ON DUPLICATE KEY UPDATE " +
-             COLUMN_USER_LOGIN + " =?";
-    private static final String SQL_SELECT_ALL_USERS = "SELECT " +  COLUMN_USER_ID + ", " +
-             COLUMN_USER_LOGIN + ", " +
-             COLUMN_USER_EMAIL + " FROM " +
-             USER_TABLE;
-    private static final String SQL_SELECT_USERS_BY_NAME = "SELECT " +  COLUMN_USER_ID + ", " +
-             COLUMN_USER_LOGIN + ", " +
-             COLUMN_USER_EMAIL + " FROM " +
-             USER_TABLE + " WHERE " +
-             COLUMN_USER_LOGIN + " like ?";
-    private static final String SQL_UPDATE_STATUS = "UPDATE " +  USER_TABLE + " SET " +
-             COLUMN_USER_STATUS + " =?  WHERE " +  COLUMN_USER_LOGIN + "=? AND " +  COLUMN_USER_STATUS + "=?";
+    private static final String SQL_SELECT_LOGIN = "SELECT * FROM " + USER_TABLE + " WHERE " +
+            COLUMN_LOGIN + "=? AND " +
+            COLUMN_PASSWORD + "=?";
+    private static final String SQL_INSERT_REGISTER = "INSERT INTO " + USER_TABLE + " (" +
+            COLUMN_LOGIN + "," + COLUMN_PASSWORD + "," +
+            COLUMN_EMAIL + "," + COLUMN_ROLE + "," +
+            COLUMN_STATUS + ")" +
+            "VALUES(?,?,?,?,?)" + " ON DUPLICATE KEY UPDATE " + COLUMN_ID + "=" + COLUMN_ID;
+    private static final String SQL_SELECT_ALL_USERS = "SELECT " + COLUMN_ID + ", " +
+            COLUMN_LOGIN + ", " +
+            COLUMN_EMAIL + " FROM " +
+            USER_TABLE;
+    private static final String SQL_SELECT_USERS_BY_NAME = "SELECT " + COLUMN_ID + ", " +
+            COLUMN_LOGIN + ", " +
+            COLUMN_RATING + ", " +
+            COLUMN_ROLE + ", " +
+            COLUMN_EMAIL + " FROM " +
+            USER_TABLE + " WHERE " +
+            COLUMN_LOGIN + " like ?";
+    private static final String SQL_UPDATE_STATUS = "UPDATE " + USER_TABLE + " SET " +
+            COLUMN_STATUS + " =?  WHERE " + COLUMN_LOGIN + "=? AND " + COLUMN_STATUS + "=?";
 
 
     @Override
-    public Optional<CustomUser> login(String login, String pass) throws DaoException{
+    public Optional<CustomUser> login(String login, String pass) throws DaoException {
         Optional<CustomUser> user = Optional.empty();
         try (Connection connection = CustomConnectionPool.getInstance().getConnection();
-         PreparedStatement prSt = connection.prepareStatement(SQL_SELECT_LOGIN)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_LOGIN)) {
             ResultSet resultSet;
-            prSt.setString(1,login);
-            prSt.setString(2,pass);
-            resultSet =  prSt.executeQuery();
-            if(resultSet!=null) {
-                    while (resultSet.next()) {
-                        String email = resultSet.getString( COLUMN_USER_EMAIL);
-                        int role = resultSet.getInt( COLUMN_USER_ROLE);
-                        int status = resultSet.getInt( COLUMN_USER_STATUS);
-                        user = Optional.of(new CustomUser(resultSet.getLong( COLUMN_USER_ID),
-                                login, pass,
-                                email, role, status));
-                    }
+            preparedStatement.setString(1, login);
+            preparedStatement.setString(2, pass);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet != null) {
+                while (resultSet.next()) {
+                    String email = resultSet.getString(COLUMN_EMAIL);
+                    int role = resultSet.getInt(COLUMN_ROLE);
+                    int status = resultSet.getInt(COLUMN_STATUS);
+                    user = Optional.of(new CustomUser(resultSet.getLong(COLUMN_ID),
+                            login, pass,
+                            email, role, status));
+                }
             }
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -66,36 +66,33 @@ public class UserDaoImpl implements UserDao { //todo result and statement to try
     }
 
     @Override
-    public void register(CustomUser user) throws DaoException{
-
+    public boolean register(CustomUser user) throws DaoException {
+        int numberUpdatedRows =0;
         try (Connection connection = CustomConnectionPool.getInstance().getConnection();
-             PreparedStatement  prSt= connection.prepareStatement(SQL_INSERT_REGISTER)) {
-            prSt.setString(1, user.getLogin());
-            prSt.setString(2, user.getPassword());
-            prSt.setString(3, user.getEmail());
-            prSt.setInt(4, user.getRole());
-            prSt.setInt(5,user.getStatus());
-            prSt.setString(6 ,user.getLogin());
-            prSt.executeUpdate();
-        }catch (SQLException e) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_REGISTER)) {
+            preparedStatement.setString(1, user.getLogin());
+            preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setString(3, user.getEmail());
+            preparedStatement.setInt(4, user.getRole());
+            preparedStatement.setInt(5, user.getStatus());
+            numberUpdatedRows = preparedStatement.executeUpdate();
+        } catch (SQLException e) {
             throw new DaoException(e);
         }
-        //fixme this is for single user in table
-//        numberUpdatedRows = statement.executeUpdate();
-//        return number
+         return (numberUpdatedRows > 1);
     }
 
     @Override
-    public List<CustomUser> findAllUsers() throws DaoException {
+    public List<CustomUser> findUsersByLogin() throws DaoException {
         List<CustomUser> users = new ArrayList<>();
         try (Connection connection = CustomConnectionPool.getInstance().getConnection();
              Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL_USERS);
             while (resultSet.next()) {
                 CustomUser user = new CustomUser();
-                user.setId(resultSet.getInt( COLUMN_USER_ID));
-                user.setEmail(resultSet.getString( COLUMN_USER_EMAIL));
-                user.setLogin(resultSet.getString( COLUMN_USER_LOGIN));
+                user.setId(resultSet.getInt(COLUMN_ID));
+                user.setEmail(resultSet.getString(COLUMN_EMAIL));
+                user.setLogin(resultSet.getString(COLUMN_LOGIN));
                 users.add(user);
             }
         } catch (SQLException e) {
@@ -109,14 +106,15 @@ public class UserDaoImpl implements UserDao { //todo result and statement to try
         List<CustomUser> users = new ArrayList<>();
         try (Connection connection = CustomConnectionPool.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(SQL_SELECT_USERS_BY_NAME);) {
-            statement.setString(1, userName + "%");
+            statement.setString(1, "%" + userName + "%");
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 CustomUser user = new CustomUser();
-                user.setId(resultSet.getInt( COLUMN_USER_ID));
-                user.setEmail(resultSet.getString( COLUMN_USER_EMAIL));
-                user.setLogin(resultSet.getString( COLUMN_USER_LOGIN));
-                user.setRole(resultSet.getInt( COLUMN_USER_ROLE));
+                user.setId(resultSet.getInt(COLUMN_ID));
+                user.setEmail(resultSet.getString(COLUMN_EMAIL));
+                user.setLogin(resultSet.getString(COLUMN_LOGIN));
+                user.setRole(resultSet.getInt(COLUMN_ROLE));
+                user.setRating(resultSet.getInt(COLUMN_RATING));
                 users.add(user);
             }
         } catch (SQLException e) {
@@ -135,9 +133,9 @@ public class UserDaoImpl implements UserDao { //todo result and statement to try
             statement.setInt(3, statusFrom);
             numberUpdatedRows = statement.executeUpdate();
         } catch (SQLException e) {
-            logger.log(Level.ERROR,e);
+            logger.log(Level.ERROR, e);
             throw new DaoException(e);
         }
-        return numberUpdatedRows != 0;
+        return (numberUpdatedRows != 0);
     }
 }

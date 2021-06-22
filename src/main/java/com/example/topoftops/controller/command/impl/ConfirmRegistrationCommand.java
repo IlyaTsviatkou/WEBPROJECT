@@ -5,7 +5,7 @@ import com.example.topoftops.controller.command.PagePath;
 import com.example.topoftops.controller.command.Router;
 import com.example.topoftops.exception.ServiceException;
 import com.example.topoftops.model.service.UserService;
-import com.example.topoftops.resource.ConfigurationManager;
+import com.example.topoftops.controller.command.ConfigurationManager;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import static com.example.topoftops.controller.command.RequestParam.PARAM_NAME_USER;
 
 public class ConfirmRegistrationCommand implements Command {
-    private static Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger();
     private UserService userService;
     public ConfirmRegistrationCommand(UserService userService) {
         this.userService = userService;

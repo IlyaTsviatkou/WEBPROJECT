@@ -10,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 
 final class ConnectionCreator {
     private static Logger logger = LogManager.getLogger();
-    private static final ResourceBundle bundle;
     private static final String BUNDLE_NAME = "database";
     private static final String DB_DRIVER = "db.driver";
     private static final String DB_URL = "db.url";
@@ -19,6 +18,7 @@ final class ConnectionCreator {
     private static final String DATABASE_URL;
     private static final String DATABASE_USER_NAME;
     private static final String DATABASE_PASSWORD;
+    static final ResourceBundle bundle;
 
     static {
         bundle = ResourceBundle.getBundle(BUNDLE_NAME);

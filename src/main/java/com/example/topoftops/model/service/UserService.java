@@ -14,17 +14,18 @@ import org.apache.logging.log4j.Logger;
 import java.sql.SQLException;
 
 public class UserService {
-    private static Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger();
     private static final String INFO_MESSAGE_SUBJECT_CONFIRMATION = "CONFIRM YOUR ACCOUNT";
     private UserDaoImpl dao = new UserDaoImpl();
 
-    public void sendMessage(String email, String message) {
+    public boolean sendMessage(String email, String message) {
+        boolean result = false;
         if(UserInfoValidator.isValidEmail(email)) {
             MailSender.send(email, INFO_MESSAGE_SUBJECT_CONFIRMATION,
                     message);
-        } else {
-            //todo ERROR message
+            result = true;
         }
+        return result;
     }
 
     public boolean register(CustomUser user) throws ServiceException {
@@ -33,8 +34,7 @@ public class UserService {
             String encryptedPass = Encryptor.encrypt(user.getPassword());
             user.setPassword(encryptedPass);
             try {
-                dao.register(user);
-                result = true;
+                result = dao.register(user);
             } catch (Exception e) {
                 logger.log(Level.WARN,e.getMessage());
                 throw new ServiceException(e);

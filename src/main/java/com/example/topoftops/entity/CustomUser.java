@@ -9,6 +9,35 @@ public class CustomUser {
     private String email;
     private int role;
     private int status;
+    private int rating;
+
+    public CustomUser() {
+    }
+
+    public CustomUser(long id, String login, String password, String email, int role, int status) {
+        this.id = id;
+        this.login = login;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.status = status;
+    }
+
+    public CustomUser(String login, String password, String email, int role, int status) {
+        this.login = login;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.status = status;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
 
     public int getStatus() {
         return status;
@@ -26,9 +55,6 @@ public class CustomUser {
         this.id = id;
     }
 
-    public CustomUser() {
-    }
-
     public String getEmail() {
         return email;
     }
@@ -36,24 +62,6 @@ public class CustomUser {
     public void setEmail(String information) {
         this.email = information;
     }
-
-    public CustomUser(long id, String login, String password , String email, int role , int status) {
-        this.id = id;
-        this.login = login;
-        this.password = password;
-        this.email = email;
-        this.role = role;
-        this.status =status;
-    }
-
-    public CustomUser(String login, String password , String email, int role , int status) {
-        this.login = login;
-        this.password = password;
-        this.email = email;
-        this.role = role;
-        this.status =status;
-    }
-
 
     @Override
     public boolean equals(Object o) {//fixme without Objects and add tostring
@@ -65,7 +73,7 @@ public class CustomUser {
 
     @Override
     public int hashCode() {
-        int temp =31;
+        int temp = 31;
         int result = (int) (temp * id)
                 + temp * login.length()
                 + temp * password.length()

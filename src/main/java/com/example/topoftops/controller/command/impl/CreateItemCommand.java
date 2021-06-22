@@ -8,8 +8,7 @@ import com.example.topoftops.entity.Top;
 import com.example.topoftops.exception.ServiceException;
 import com.example.topoftops.model.service.ItemService;
 import com.example.topoftops.model.service.TopService;
-import com.example.topoftops.resource.ConfigurationManager;
-import com.example.topoftops.controller.command.RequestParam;
+import com.example.topoftops.controller.command.ConfigurationManager;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -41,7 +40,7 @@ public class CreateItemCommand implements Command {
             top = (Top) topService.findById(id).get();
             String title = request.getParameter(PARAM_NAME_TITLE);
             String description = request.getParameter(PARAM_NAME_DESCRIPTION);
-            String image = request.getParameter(PARAM_NAME_IMAGE);
+            String image = request.getAttribute(PARAM_NAME_IMAGE_NAME).toString();
             Item item = new Item(title, description, image);
             item.setTop(id);
             itemService.create(item);

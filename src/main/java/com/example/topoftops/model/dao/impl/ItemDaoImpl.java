@@ -16,46 +16,46 @@ import java.util.ArrayList;
 import static com.example.topoftops.model.dao.ColumnName.*;
 
 public class ItemDaoImpl implements ItemDao {
-    public static Logger logger = LogManager.getLogger();
+    public static final Logger logger = LogManager.getLogger();
     private static final String SQL_INSERT_CREATE = "INSERT INTO " + ITEM_TABLE + "(" +
-             COLUMN_ITEM_TITLE + "," +  COLUMN_ITEM_DESCRIPTION + "," +
-             COLUMN_ITEM_TOP + "," +  COLUMN_ITEM_IMAGE + ")" +
+             COLUMN_TITLE + "," +  COLUMN_DESCRIPTION + "," +
+             COLUMN_TOP + "," +  COLUMN_IMAGE + ")" +
             "VALUES(?,?,?,?)";
-    private static final String SQL_SELECT_ALL_ITEMS_BY_TOPID = "SELECT " +  COLUMN_ITEM_ID + ", " +
-             COLUMN_ITEM_TITLE + ", " +
-             COLUMN_ITEM_DESCRIPTION + ", " +
-             COLUMN_ITEM_TOP + ", " +
-             COLUMN_ITEM_IMAGE + " FROM " +
+    private static final String SQL_SELECT_ALL_ITEMS_BY_TOPID = "SELECT " +  COLUMN_ID + ", " +
+             COLUMN_TITLE + ", " +
+             COLUMN_DESCRIPTION + ", " +
+             COLUMN_TOP + ", " +
+             COLUMN_IMAGE + " FROM " +
              ITEM_TABLE + " WHERE " +
-             COLUMN_ITEM_TOP + " like ?";
-    private static final String SQL_SELECT_ITEM_BY_TITLE = "SELECT " +  COLUMN_ITEM_ID + ", " +
-             COLUMN_ITEM_TITLE + ", " +
-             COLUMN_ITEM_IMAGE + ", " +
-             COLUMN_ITEM_TOP + ", " +
-             COLUMN_ITEM_DESCRIPTION + " FROM " +
+             COLUMN_TOP + " like ?";
+    private static final String SQL_SELECT_BY_TITLE = "SELECT " +  COLUMN_ID + ", " +
+             COLUMN_TITLE + ", " +
+             COLUMN_IMAGE + ", " +
+             COLUMN_TOP + ", " +
+             COLUMN_DESCRIPTION + " FROM " +
              ITEM_TABLE + " WHERE " +
-             COLUMN_ITEM_TITLE + " like ?";
-    private static final String SQL_DELETE_ITEM_BY_ID ="DELETE FROM " +  ITEM_TABLE +
-            " where " +  COLUMN_ITEM_ID + " =?";
-    private static final String SQL_DELETE_ITEM_BY_TOP_ID ="DELETE FROM " +  ITEM_TABLE +
-            " where " +  COLUMN_ITEM_TOP + " =?";
-    private static final String SQL_UPDATE_ITEM_BY_ID ="UPDATE " +  ITEM_TABLE + " SET " +
-             COLUMN_ITEM_TITLE + " =?," +
-             COLUMN_ITEM_DESCRIPTION + " =?," +
-             COLUMN_ITEM_IMAGE + " =?," +
-            " WHERE " +  COLUMN_ITEM_ID + " =?";
+             COLUMN_TITLE + " like ?";
+    private static final String SQL_DELETE_BY_ID ="DELETE FROM " +  ITEM_TABLE +
+            " where " +  COLUMN_ID + " =?";
+    private static final String SQL_DELETE_BY_TOP_ID ="DELETE FROM " +  ITEM_TABLE +
+            " where " +  COLUMN_TOP + " =?";
+    private static final String SQL_UPDATE_BY_ID ="UPDATE " +  ITEM_TABLE + " SET " +
+             COLUMN_TITLE + " =?," +
+             COLUMN_DESCRIPTION + " =?," +
+             COLUMN_IMAGE + " =?," +
+            " WHERE " +  COLUMN_ID + " =?";
 
 
     @Override
     public void create(Item item) throws DaoException {
 
         try (Connection connection = CustomConnectionPool.getInstance().getConnection();
-             PreparedStatement prSt = connection.prepareStatement(SQL_INSERT_CREATE)){
-            prSt.setString(1, item.getTitle());
-            prSt.setString(2, item.getDescription());
-            prSt.setLong(3, item.getTop());
-            prSt.setString(4, item.getImage());
-            prSt.executeUpdate();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_CREATE)){
+            preparedStatement.setString(1, item.getTitle());
+            preparedStatement.setString(2, item.getDescription());
+            preparedStatement.setLong(3, item.getTop());
+            preparedStatement.setString(4, item.getImage());
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             logger.log(Level.WARN,e.getMessage());
             throw new DaoException(e);
@@ -65,9 +65,9 @@ public class ItemDaoImpl implements ItemDao {
 
     public void delete(long id) throws DaoException{
         try (Connection connection = CustomConnectionPool.getInstance().getConnection();
-            PreparedStatement prSt= connection.prepareStatement(SQL_DELETE_ITEM_BY_ID)){
-            prSt.setLong(1, id);
-            prSt.executeUpdate();
+            PreparedStatement preparedStatement= connection.prepareStatement(SQL_DELETE_BY_ID)){
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             logger.log(Level.WARN,e.getMessage());
             throw new DaoException(e);
@@ -84,11 +84,11 @@ public class ItemDaoImpl implements ItemDao {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Item item = new Item();
-                item.setTitle(resultSet.getString( COLUMN_ITEM_TITLE));
-                item.setDescription(resultSet.getString( COLUMN_ITEM_DESCRIPTION));
-                item.setImage(resultSet.getString( COLUMN_ITEM_IMAGE));
-                item.setTop(resultSet.getLong( COLUMN_ITEM_TOP));
-                item.setId(resultSet.getLong( COLUMN_ITEM_ID));
+                item.setTitle(resultSet.getString( COLUMN_TITLE));
+                item.setDescription(resultSet.getString( COLUMN_DESCRIPTION));
+                item.setImage(resultSet.getString( COLUMN_IMAGE));
+                item.setTop(resultSet.getLong( COLUMN_TOP));
+                item.setId(resultSet.getLong( COLUMN_ID));
                 items.add(item);
             }
         } catch (SQLException e) {
@@ -102,15 +102,15 @@ public class ItemDaoImpl implements ItemDao {
     public Item findItemByTitle(String title) throws DaoException {
        Item item = new Item();
         try (Connection connection = CustomConnectionPool.getInstance().getConnection();
-            PreparedStatement statement = connection.prepareStatement(SQL_SELECT_ITEM_BY_TITLE)) {
+            PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_TITLE)) {
             statement.setString(1, title );
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                item.setTitle(resultSet.getString( COLUMN_ITEM_TITLE));
-                item.setDescription(resultSet.getString( COLUMN_ITEM_DESCRIPTION));
-                item.setImage(resultSet.getString( COLUMN_ITEM_IMAGE));
-                item.setTop(resultSet.getLong( COLUMN_ITEM_TOP));
-                item.setId(resultSet.getLong( COLUMN_ITEM_ID));
+                item.setTitle(resultSet.getString( COLUMN_TITLE));
+                item.setDescription(resultSet.getString( COLUMN_DESCRIPTION));
+                item.setImage(resultSet.getString( COLUMN_IMAGE));
+                item.setTop(resultSet.getLong( COLUMN_TOP));
+                item.setId(resultSet.getLong( COLUMN_ID));
             }
         } catch (SQLException e) {
             logger.log(Level.WARN,e.getMessage());

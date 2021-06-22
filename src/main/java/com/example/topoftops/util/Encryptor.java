@@ -23,7 +23,7 @@ public class Encryptor {
             ivParameterSpec = generateIv();
             algorithm = "AES/CBC/PKCS5Padding";
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            logger.log(Level.ERROR,e);
         }
     }
 
@@ -58,29 +58,32 @@ public class Encryptor {
     }
 
     public static String encryptC(String input) {
+        String result;
         try {
             Cipher cipher = Cipher.getInstance(algorithm);
             cipher.init(Cipher.ENCRYPT_MODE, key, ivParameterSpec);
             byte[] cipherText = cipher.doFinal(input.getBytes());
-            return Base64.getEncoder()
-                    .encodeToString(cipherText);
+            result = Base64.getEncoder().encodeToString(cipherText);
         } catch (NoSuchAlgorithmException | InvalidKeyException | InvalidAlgorithmParameterException | NoSuchPaddingException | BadPaddingException | IllegalBlockSizeException e) {
             logger.log(Level.ERROR,e);
-            return "0";
+            result="0";
         }
+        return result;
     }
 
     public static String decryptC(String cipherText) {
+        String result;
         try {
             Cipher cipher = Cipher.getInstance(algorithm);
             cipher.init(Cipher.DECRYPT_MODE, key, ivParameterSpec);
             byte[] plainText = cipher.doFinal(Base64.getDecoder()
                     .decode(cipherText));
-            return new String(plainText);
+            result = Base64.getEncoder().encodeToString(plainText);
         } catch (NoSuchAlgorithmException | InvalidKeyException | InvalidAlgorithmParameterException | NoSuchPaddingException | BadPaddingException | IllegalBlockSizeException e) {
             logger.log(Level.ERROR,e);
-            return "0";
+            result = "0";
         }
+        return result;
     }
 }
 

@@ -11,4 +11,5 @@ public interface TopDao {
     ArrayList<Top> findAllTops(long id) throws DaoException;
     Top findTopByTitle(String title) throws DaoException;
     Top findTopByID(long id) throws DaoException;
+    void updateRating(int mark , long id) throws DaoException;
 }

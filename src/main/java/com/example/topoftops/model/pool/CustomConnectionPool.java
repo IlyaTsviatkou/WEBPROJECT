@@ -15,27 +15,27 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import static com.example.topoftops.model.pool.ConnectionCreator.bundle;
+
 public class CustomConnectionPool {
     private static final Logger logger = LogManager.getLogger();
     private static boolean isCreated;
     private static Lock locker = new ReentrantLock(true);
-    private static final ResourceBundle bundle;
     private static final String BUNDLE_NAME = "database";
     private static final String DB_POOLSIZE = "db.poolsize";
     private static final int POOL_SIZE;
-    private static CustomConnectionPool instance = null;
+    private static CustomConnectionPool instance;
     private BlockingQueue<Connection> freeConnection;
     private BlockingQueue<Connection> givenAwayConnection;
 
     static {
-        bundle = ResourceBundle.getBundle(BUNDLE_NAME);
         POOL_SIZE = Integer.parseInt(bundle.getString(DB_POOLSIZE));
     }
 
 
-    CustomConnectionPool () {
+    CustomConnectionPool() {
         freeConnection = new LinkedBlockingDeque<>(POOL_SIZE);
-        givenAwayConnection = new LinkedBlockingDeque<Connection>();
+        givenAwayConnection = new LinkedBlockingDeque<>(POOL_SIZE);
         try {
             for (int i = 0; i < POOL_SIZE; i++) {
                 Connection connection = ConnectionCreator.createConnection();
@@ -43,18 +43,22 @@ public class CustomConnectionPool {
                 freeConnection.add(proxyConnection);
             }
         } catch (SQLException e) {
-            logger.log(Level.ERROR,"cant connect with db" + e);
+            logger.log(Level.ERROR, "cant connect with db" + e);
+            throw new RuntimeException(e);
         }
     }
 
-    public static CustomConnectionPool getInstance() throws SQLException {
-        if(!isCreated) {
-            locker.lock();
-            if(instance == null) {
-                instance = new CustomConnectionPool();
-                isCreated=true;
+    public static CustomConnectionPool getInstance() {
+        if (!isCreated) {
+            try {
+                locker.lock();
+                if (instance == null) {
+                    instance = new CustomConnectionPool();
+                    isCreated = true;
+                }
+            } finally {
+                locker.unlock();
             }
-            locker.unlock();
         }
         return instance;
     }
@@ -64,7 +68,7 @@ public class CustomConnectionPool {
         Connection connection = null;
         try {
             connection = freeConnection.take();
-            givenAwayConnection.offer(connection);
+            givenAwayConnection.put(connection);
         } catch (InterruptedException e) {
             logger.error("Thread was interrupted, " + e.getMessage());
         }
@@ -72,22 +76,22 @@ public class CustomConnectionPool {
     }
 
     public void releaseConnection(Connection connection) {
-        if(connection.getClass() == ProxyConnection.class && givenAwayConnection.remove(connection)) {
+        if (connection.getClass() == ProxyConnection.class && givenAwayConnection.remove(connection)) {
             try {
                 freeConnection.put(connection);
             } catch (InterruptedException e) {
-                logger.log(Level.WARN,e.getMessage());
+                logger.log(Level.WARN, e.getMessage());
             }
         }
     }
 
     public void destroyPool() {
-        for (int i=0; i < POOL_SIZE; i++ ) {
+        for (int i = 0; i < POOL_SIZE; i++) {
             try {
-               ProxyConnection connection = (ProxyConnection) freeConnection.take();
-               connection.reallyClose();
+                ProxyConnection connection = (ProxyConnection) freeConnection.take();
+                connection.reallyClose();
             } catch (InterruptedException e) {
-                logger.log(Level.WARN,e.getMessage());
+                logger.log(Level.WARN, e.getMessage());
             }
         }
         deregisterDrivers();
@@ -100,7 +104,7 @@ public class CustomConnectionPool {
             try {
                 DriverManager.deregisterDriver(driver);
             } catch (SQLException e) {
-                logger.log(Level.FATAL,"driver deregistration error", e);
+                logger.log(Level.FATAL, "driver deregistration error", e);
             }
         }
 

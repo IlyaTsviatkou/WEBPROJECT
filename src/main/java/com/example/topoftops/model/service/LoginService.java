@@ -14,7 +14,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 public class LoginService {
-    private static Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger();
     private UserDaoImpl dao = new UserDaoImpl();
     public Optional<CustomUser> login(String login, String password) throws ServiceException {
         //todo where should i check if user is null????

@@ -6,7 +6,8 @@ import com.example.topoftops.controller.command.Command;
 import com.example.topoftops.controller.command.PagePath;
 import com.example.topoftops.controller.command.RequestHelper;
 import com.example.topoftops.controller.command.Router;
-import com.example.topoftops.resource.ConfigurationManager;
+import com.example.topoftops.controller.command.ConfigurationManager;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,8 +37,8 @@ public class Controller extends HttpServlet {
     private void processRequest(HttpServletRequest request,HttpServletResponse response)
             throws ServletException, IOException {
         RequestHelper requestHelper = RequestHelper.getInstance();
-        String action = request.getParameter(PARAM_NAME_COMMAND);
-        Command command = requestHelper.getCommand(action);
+        String commandName = request.getParameter(PARAM_NAME_COMMAND);
+        Command command = requestHelper.getCommand(commandName);
         Router router = command.execute(request);
         switch (router.getRouteType()) {
             case REDIRECT:
@@ -48,7 +49,7 @@ public class Controller extends HttpServlet {
                 dispatcher.forward(request, response);
                 break;
             default:
-                logger.error("incorrect route type " + router.getRouteType());
+                logger.log(Level.ERROR,"incorrect route type " + router.getRouteType());
                 String page;
                 page = ConfigurationManager.getProperty(PagePath.INDEX);
                 response.sendRedirect(request.getContextPath() + page);

@@ -4,7 +4,7 @@ import com.example.topoftops.controller.command.Command;
 import com.example.topoftops.controller.command.PagePath;
 import com.example.topoftops.controller.command.Router;
 import com.example.topoftops.entity.CustomUser;
-import com.example.topoftops.resource.ConfigurationManager;
+import com.example.topoftops.controller.command.ConfigurationManager;
 
 import javax.servlet.http.HttpServletRequest;
 

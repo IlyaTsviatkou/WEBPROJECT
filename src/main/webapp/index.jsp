@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" errorPage="pages/error.jsp" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <fmt:setLocale value="${locale}" scope="session"/>
 <fmt:setBundle basename="pagecontent"/>
 <!DOCTYPE html>
@@ -7,40 +8,29 @@
 <style>
 
 </style>
+<jsp:include page="pages/header.jsp" />
 <head>
-    <title>TOPofTOPs</title>
+
 </head>
 <body>
-<h1>"WEB APP!"
-</h1>
-
-Кодировка запроса: ${ pageContext.request.characterEncoding }
-<br/>
-<br/>
-<fmt:message key="label.login"/>: ${sessionScope.user.getLogin()}
-
-<br/>
-<br/>
-<br/>
-<div>
-    <form name="toLoginPage" action="controller" method="post">
-        <input type="hidden" name="command" value="to_login_page">
-        <input type="submit" name="submit" value="<fmt:message key="label.login"/>">
-    </form>
-    <form name="toRegisterPage" action="controller" method="post">
-        <input type="hidden" name="command" value="to_register_page">
-        <input type="submit" name="submit" value="<fmt:message key="label.register"/>">
-    </form>
-</div>
-<form name="sortForm" action="controller" method="post">
-    <input type="hidden" name="command" value="find_all_users"/>
-    <input type="submit" name="submit" value="<fmt:message key="label.showall"/>">
+</body>
+</br>
+</br>
+</br>
+<c:if test="${sessionScope.user.getRole() == 1}">
+<form name="toAdminPanelForm" action="controller" method="post">
+    <input type="hidden" name="command" value="to_admin_panel_page"/>
+    <input type="submit" name="submit" value="<fmt:message key="label.admin_panel"/>">
 </form>
-<form name="topForm" action="controller" method="post">
-    <input type="hidden" name="command" value="to_create_top_page"/>
-    <input type="submit" name="submit" value="<fmt:message key="label.create_top"/>">
-</form>
-<br/>
+</c:if>
+<c:if test="${sessionScope.user.getLogin() != null}">
+    <form name="topForm" action="controller" method="post">
+        <input type="hidden" name="command" value="to_create_top_page"/>
+        <input type="submit" name="submit" value="<fmt:message key="label.create_top"/>">
+    </form>
+    <br/>
+</c:if>
+
 <form name="changeLocal" action="controller" method="post">
     <p><b><fmt:message key="label.your_language"/></b></p>
     <input type="hidden" name="command" value="change_local"/>
@@ -48,11 +38,6 @@
     <p><input name="language" type="radio" value="eng"> <fmt:message key="label.english"/> </p>
     <p><input type="submit" value="<fmt:message key="label.submit"/>"></p>
 </form>
-<form name="topPageForm" action="controller" method="post">
-    <input type="hidden" name="command" value="to_top_page" />
-    <input type="text" name="title" value="" placeholder="title" maxlength="45">
-    <br/>
-    <input type="submit" name="submit" value="<fmt:message key="label.top_page"/>">
-</form>
+
 </body>
 </html>

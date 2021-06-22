@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 import java.sql.SQLException;
 
 public class RegisterService {
-    private static Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger();
     private UserDaoImpl dao = new UserDaoImpl();
     public boolean register(CustomUser user) throws ServiceException {
         boolean result = true;

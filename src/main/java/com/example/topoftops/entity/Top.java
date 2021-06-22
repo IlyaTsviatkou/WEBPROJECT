@@ -10,6 +10,15 @@ public class Top {
     private String description;
     private String image;
     private ArrayList<Item> items;
+    private int rating;
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
 
     public long getId() {
         return id;

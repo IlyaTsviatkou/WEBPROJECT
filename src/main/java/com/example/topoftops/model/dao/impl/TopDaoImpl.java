@@ -5,58 +5,68 @@ import com.example.topoftops.exception.DaoException;
 import com.example.topoftops.model.dao.ColumnName;
 import com.example.topoftops.model.dao.TopDao;
 import com.example.topoftops.model.pool.CustomConnectionPool;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import static com.example.topoftops.model.dao.ColumnName.*;
 
 public class TopDaoImpl implements TopDao {
-    private static final String SQL_INSERT_CREATE = "INSERT INTO " +  TOP_TABLE + "(" +
-             COLUMN_TOP_TITLE + "," +  COLUMN_TOP_DESCRIPTION + "," +
-             COLUMN_TOP_USER + "," +  COLUMN_TOP_IMAGE + ")" +
+    private static final Logger logger = LogManager.getLogger();
+    private static final String SQL_INSERT_CREATE = "INSERT INTO " + TOP_TABLE + "(" +
+            COLUMN_TITLE + "," + COLUMN_DESCRIPTION + "," +
+            COLUMN_USER + "," + COLUMN_IMAGE + ")" +
             "VALUES(?,?,?,?)";
-    private static final String SQL_SELECT_ALL_TOPS_BY_USERID = "SELECT " +  COLUMN_TOP_ID + ", " +
-             COLUMN_TOP_TITLE + ", " +
-             COLUMN_TOP_DESCRIPTION + ", " +
-             COLUMN_TOP_USER + ", " +
-             COLUMN_TOP_IMAGE + " FROM " +
-             TOP_TABLE + " WHERE " +
-             COLUMN_TOP_USER + " like ?";
-    private static final String SQL_SELECT_TOP_BY_TITLE = "SELECT " +  COLUMN_TOP_ID + ", " +
-             COLUMN_TOP_TITLE + ", " +
-             COLUMN_TOP_IMAGE + ", " +
-             COLUMN_TOP_USER + ", " +
-             COLUMN_TOP_DESCRIPTION + " FROM " +
-             TOP_TABLE + " WHERE " +
-             COLUMN_TOP_TITLE + " like ?";
-    private static final String SQL_SELECT_TOP_BY_ID = "SELECT " +  COLUMN_TOP_ID + ", " +
-             COLUMN_TOP_TITLE + ", " +
-             COLUMN_TOP_IMAGE + ", " +
-             COLUMN_TOP_USER + ", " +
-             COLUMN_TOP_DESCRIPTION + " FROM " +
-             TOP_TABLE + " WHERE " +
-             COLUMN_TOP_ID + " like ?";
-    private static final String SQL_DELETE_TOP_BY_ID ="DELETE FROM " +  TOP_TABLE +
-            " where " +  COLUMN_TOP_ID + " =?";
-    private static final String SQL_DELETE_TOP_BY_USER_ID ="DELETE FROM " +  TOP_TABLE +
-            " where " +  COLUMN_TOP_USER + " =?";
-    private static final String SQL_UPDATE_TOP_BY_ID ="UPDATE " +  TOP_TABLE + " SET " +
-             COLUMN_TOP_TITLE + " =?," +
-             COLUMN_TOP_DESCRIPTION + " =?," +
-             COLUMN_TOP_IMAGE + " =?," +
-            " WHERE " +  COLUMN_TOP_ID + " =?";
+    private static final String SQL_SELECT_ALL_TOPS_BY_USERID = "SELECT " + COLUMN_ID + ", " +
+            COLUMN_TITLE + ", " +
+            COLUMN_DESCRIPTION + ", " +
+            COLUMN_USER + ", " +
+            COLUMN_RATING + "," +
+            COLUMN_IMAGE + " FROM " +
+            TOP_TABLE + " WHERE " +
+            COLUMN_USER + " like ?";
+    private static final String SQL_SELECT_BY_TITLE = "SELECT " + COLUMN_ID + ", " +
+            COLUMN_TITLE + ", " +
+            COLUMN_IMAGE + ", " +
+            COLUMN_USER + ", " +
+            COLUMN_RATING + "," +
+            COLUMN_DESCRIPTION + " FROM " +
+            TOP_TABLE + " WHERE " +
+            COLUMN_TITLE + " like ?";
+    private static final String SQL_SELECT_BY_ID = "SELECT " + COLUMN_ID + ", " +
+            COLUMN_TITLE + ", " +
+            COLUMN_IMAGE + ", " +
+            COLUMN_USER + ", " +
+            COLUMN_RATING + "," +
+            COLUMN_DESCRIPTION + " FROM " +
+            TOP_TABLE + " WHERE " +
+            COLUMN_ID + " like ?";
+    private static final String SQL_DELETE_BY_ID = "DELETE FROM " + TOP_TABLE +
+            " where " + COLUMN_ID + " =?";
+    private static final String SQL_DELETE_BY_USER_ID = "DELETE FROM " + TOP_TABLE +
+            " where " + COLUMN_USER + " =?";
+    private static final String SQL_UPDATE_BY_ID = "UPDATE " + TOP_TABLE + " SET " +
+            COLUMN_TITLE + " =?," +
+            COLUMN_DESCRIPTION + " =?," +
+            COLUMN_IMAGE + " =?," +
+            " WHERE " + COLUMN_ID + " =?";
+    private static final String SQL_UPDATE_RATING = "UPDATE " + TOP_TABLE + " SET " +
+            COLUMN_RATING + " = " + COLUMN_RATING + " + ? WHERE " + COLUMN_ID + "=?";
 
 
     @Override
-    public void create(Top top) throws DaoException{
+    public void create(Top top) throws DaoException {
         try (Connection connection = CustomConnectionPool.getInstance().getConnection();
-        PreparedStatement  prSt = connection.prepareStatement(SQL_INSERT_CREATE)){
-            prSt.setString(1, top.getTitle());
-            prSt.setString(2, top.getDescription());
-            prSt.setLong(3, top.getUser());
-            prSt.setString(4, top.getImage());
-            prSt.executeUpdate();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_CREATE)) {
+            preparedStatement.setString(1, top.getTitle());
+            preparedStatement.setString(2, top.getDescription());
+            preparedStatement.setLong(3, top.getUser());
+            preparedStatement.setString(4, top.getImage());
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);
         }
@@ -70,11 +80,11 @@ public class TopDaoImpl implements TopDao {
             ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL_TOPS_BY_USERID);
             while (resultSet.next()) {
                 Top top = new Top();
-                top.setTitle(resultSet.getString( COLUMN_TOP_TITLE));
-                top.setDescription(resultSet.getString( COLUMN_TOP_DESCRIPTION));
-                top.setImage(resultSet.getString( COLUMN_TOP_IMAGE));
-                top.setUser(resultSet.getLong( COLUMN_TOP_USER));
-                top.setId(resultSet.getLong( COLUMN_TOP_ID));
+                top.setTitle(resultSet.getString(COLUMN_TITLE));
+                top.setDescription(resultSet.getString(COLUMN_DESCRIPTION));
+                top.setImage(resultSet.getString(COLUMN_IMAGE));
+                top.setUser(resultSet.getLong(COLUMN_USER));
+                top.setId(resultSet.getLong(COLUMN_ID));
                 tops.add(top);
             }
         } catch (SQLException e) {
@@ -85,17 +95,18 @@ public class TopDaoImpl implements TopDao {
 
     @Override
     public Top findTopByTitle(String title) throws DaoException {
-        Top top = new Top();
+        Top top = null;
         try (Connection connection = CustomConnectionPool.getInstance().getConnection();
-             PreparedStatement statement = connection.prepareStatement(SQL_SELECT_TOP_BY_TITLE)) {
+             PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_TITLE)) {
             statement.setString(1, title);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                top.setTitle(resultSet.getString( COLUMN_TOP_TITLE));
-                top.setDescription(resultSet.getString( COLUMN_TOP_DESCRIPTION));
-                top.setImage(resultSet.getString( COLUMN_TOP_IMAGE));
-                top.setUser(resultSet.getLong( COLUMN_TOP_USER));
-                top.setId(resultSet.getLong( COLUMN_TOP_ID));
+                top = new Top();
+                top.setTitle(resultSet.getString(COLUMN_TITLE));
+                top.setDescription(resultSet.getString(COLUMN_DESCRIPTION));
+                top.setImage(resultSet.getString(COLUMN_IMAGE));
+                top.setUser(resultSet.getLong(COLUMN_USER));
+                top.setId(resultSet.getLong(COLUMN_ID));
             }
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -107,20 +118,35 @@ public class TopDaoImpl implements TopDao {
     public Top findTopByID(long id) throws DaoException {
         Top top = new Top();
         try (Connection connection = CustomConnectionPool.getInstance().getConnection();
-         PreparedStatement statement = connection.prepareStatement(SQL_SELECT_TOP_BY_ID)) {
+             PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_ID)) {
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                top.setTitle(resultSet.getString( COLUMN_TOP_TITLE));
-                top.setDescription(resultSet.getString( COLUMN_TOP_DESCRIPTION));
-                top.setImage(resultSet.getString( COLUMN_TOP_IMAGE));
-                top.setUser(resultSet.getLong( COLUMN_TOP_USER));
-                top.setId(resultSet.getLong( COLUMN_TOP_ID));
+                top.setTitle(resultSet.getString(COLUMN_TITLE));
+                top.setDescription(resultSet.getString(COLUMN_DESCRIPTION));
+                top.setImage(resultSet.getString(COLUMN_IMAGE));
+                top.setUser(resultSet.getLong(COLUMN_USER));
+                top.setId(resultSet.getLong(COLUMN_ID));
             }
         } catch (SQLException e) {
             throw new DaoException(e);
         }
         return top;
+    }
+
+    @Override
+    public void updateRating(int mark, long id) throws DaoException {
+
+        try (Connection connection = CustomConnectionPool.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(SQL_UPDATE_RATING)) {
+            statement.setInt(1, mark);
+            statement.setLong(2, id);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            logger.log(Level.ERROR, e);
+            throw new DaoException(e);
+        }
+
     }
 }
 

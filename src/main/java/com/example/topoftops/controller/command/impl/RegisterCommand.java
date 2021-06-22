@@ -6,16 +6,14 @@ import com.example.topoftops.controller.command.Router;
 import com.example.topoftops.entity.CustomUser;
 import com.example.topoftops.exception.ServiceException;
 import com.example.topoftops.model.service.UserService;
-import com.example.topoftops.resource.ConfigurationManager;
-import com.example.topoftops.resource.MessageManager;
+import com.example.topoftops.controller.command.ConfigurationManager;
+import com.example.topoftops.controller.command.MessageManager;
 import com.example.topoftops.util.Encryptor;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.SQLException;
-import java.util.Random;
 
 import static com.example.topoftops.controller.command.RequestParam.*;
 
@@ -50,7 +48,10 @@ public class RegisterCommand implements Command {
                 String ecryptedStr = Encryptor.encryptC(user.getLogin());
                 String link = "http://localhost:8080/WEB_App_war_exploded/controller?command=confirm_registration&userId=" + ecryptedStr;
                 String message = "To confirm ur account use THIS: " + link;
-                userService.sendMessage(user.getEmail(), message);
+                boolean isSent = userService.sendMessage(user.getEmail(), message);
+                if(!isSent) {
+                    logger.log(Level.WARN,"email is not valid" + user.getEmail());
+                }
                 page = ConfigurationManager.getProperty(PagePath.PROFILE);
             } else {
                 request.setAttribute(ATTRIBUTE_NAME_ERROR_LOGIN, MessageManager.getProperty("message.errorlogin"));

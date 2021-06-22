@@ -5,8 +5,8 @@ import com.example.topoftops.controller.command.PagePath;
 import com.example.topoftops.controller.command.Router;
 import com.example.topoftops.entity.CustomUser;
 import com.example.topoftops.exception.ServiceException;
-import com.example.topoftops.resource.ConfigurationManager;
-import com.example.topoftops.resource.MessageManager;
+import com.example.topoftops.controller.command.ConfigurationManager;
+import com.example.topoftops.controller.command.MessageManager;
 import com.example.topoftops.model.service.LoginService;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -19,7 +19,7 @@ import static com.example.topoftops.controller.command.RequestParam.PARAM_NAME_L
 import static com.example.topoftops.controller.command.RequestParam.PARAM_NAME_PASSWORD;
 
 public class LoginCommand implements Command {
-    private static Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger();
     private static final String ATTRIBUTE_NAME_USER = "user";
     private static final String ATTRIBUTE_NAME_ERROR_LOGIN = "errorLogin";
     private LoginService loginService;

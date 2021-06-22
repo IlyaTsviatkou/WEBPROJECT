@@ -6,6 +6,8 @@ public class UserInfoValidator {
     private static final String REGEXP_VALID_PASSWORD = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
     private static final String REGEXP_VALID_EMAIL = "^[\\w-\\+]+(\\.[\\w-]+)*@[a-zA-Z\\d-]+(\\.[a-zA-Z\\d]+)*(\\.[a-zA-Z]{2,})$";
 
+    private UserInfoValidator(){}
+
     public static boolean isValidLogin(String login) {
         boolean isValidLogin = login.matches(REGEXP_VALID_LOGIN);
         return isValidLogin;
@@ -20,6 +22,7 @@ public class UserInfoValidator {
         boolean isValidEmail = email.matches(REGEXP_VALID_EMAIL);
         return isValidEmail;
     }
+
 
 
 }

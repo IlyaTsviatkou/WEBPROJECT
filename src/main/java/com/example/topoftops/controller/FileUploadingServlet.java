@@ -5,8 +5,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.file.Paths;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
@@ -23,10 +21,8 @@ import com.example.topoftops.controller.command.Command;
 import com.example.topoftops.controller.command.PagePath;
 import com.example.topoftops.controller.command.RequestHelper;
 import com.example.topoftops.controller.command.Router;
-import com.example.topoftops.resource.ConfigurationManager;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import com.example.topoftops.controller.command.ConfigurationManager;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -69,11 +65,11 @@ public class FileUploadingServlet extends HttpServlet {
         try {
             String path = ResourceBundle.getBundle(BUNDLE_NAME).getString(PATH_IMG);
             String title = request.getParameter(PARAM_NAME_TITLE);
-            Part file = request.getPart("imageName");
+            Part file = request.getPart(PARAM_NAME_IMAGE_NAME);
             String imageName = title + "_" + file.getSubmittedFileName();
             file.write(path + File.separator + imageName);
             request.setAttribute(PARAM_NAME_IMAGE_NAME,imageName);
-        } catch (Exception ex) {
+        } catch (Exception ex) {//fixme add custom exception
             request.setAttribute("message", "File Upload Failed due to " + ex);
         }
 
@@ -90,9 +86,8 @@ public class FileUploadingServlet extends HttpServlet {
                 dispatcher.forward(request, response);
                 break;
             default:
-                logger.error("incorrect route type " + router.getRouteType());
-                String page;
-                page = ConfigurationManager.getProperty(PagePath.INDEX);
+                logger.log(Level.ERROR,"incorrect route type " + router.getRouteType());
+                String page = ConfigurationManager.getProperty(PagePath.INDEX);
                 response.sendRedirect(request.getContextPath() + page);
         }
     }

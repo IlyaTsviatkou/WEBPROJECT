@@ -12,4 +12,5 @@ public class RequestParam {
     public static final String PARAM_NAME_EMAIL = "email";
     public static final String PARAM_NAME_COMMAND = "command";
     public static final String PARAM_NAME_IMAGE_NAME = "imageName";
+    private RequestParam(){}
 }

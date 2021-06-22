@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.Optional;
 
 public class TopService {
-    private static Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger();
     private TopDaoImpl dao = new TopDaoImpl();
 
     public Optional<Top> findByTitle(String title) throws ServiceException {
@@ -33,4 +33,13 @@ public class TopService {
         }
         return top;
     }
+    public void updateRating(int mark, long id) throws ServiceException {
+        try {
+            dao.updateRating(mark, id);
+        } catch (Exception e) {
+            logger.log(Level.WARN,e.getMessage());
+            throw new ServiceException(e);
+        }
+    }
+
 }

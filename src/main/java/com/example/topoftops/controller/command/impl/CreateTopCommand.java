@@ -6,7 +6,7 @@ import com.example.topoftops.controller.command.Router;
 import com.example.topoftops.entity.CustomUser;
 import com.example.topoftops.entity.Top;
 import com.example.topoftops.model.service.CreateTopService;
-import com.example.topoftops.resource.ConfigurationManager;
+import com.example.topoftops.controller.command.ConfigurationManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

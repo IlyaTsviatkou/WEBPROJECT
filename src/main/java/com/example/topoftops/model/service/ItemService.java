@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 
 public class ItemService {
-    private static Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger();
     private ItemDaoImpl dao = new ItemDaoImpl();
 
     public ArrayList<Item> find(long id) throws ServiceException {
