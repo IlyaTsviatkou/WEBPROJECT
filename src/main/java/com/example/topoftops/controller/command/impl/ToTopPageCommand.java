@@ -17,8 +17,14 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import static com.example.topoftops.controller.command.RequestParam.PARAM_NAME_TITLE;
+import static com.example.topoftops.controller.command.RequestParam.PARAM_NAME_TOP;
 
+/**
+ * The command is responsible for going to top page
+ *
+ * @author Ilya Tsvetkov
+ * @see Command
+ */
 public class ToTopPageCommand implements Command {
     private static final Logger logger = LogManager.getLogger();
     private static final String ATTRIBUTE_TOP = "top";
@@ -34,14 +40,15 @@ public class ToTopPageCommand implements Command {
     public Router execute(HttpServletRequest request) {
         Router router;
         String page;
-        Optional<Top> optionalTop = null;
+        Optional<Top> optionalTop;
         try {
-            optionalTop = topService.findByTitle(request.getParameter(PARAM_NAME_TITLE));
+            long topId = Long.parseLong(request.getParameter(PARAM_NAME_TOP));
+            optionalTop = topService.findById(topId);
             Top top;
             if (optionalTop.isPresent()) {
                 ArrayList<Item> items;
                 top = (Top) optionalTop.get();
-                items = itemService.find(top.getId());
+                items = itemService.findItems(top.getId());
                 top.setItems(items);
                 request.setAttribute(ATTRIBUTE_TOP, top);
                 page = ConfigurationManager.getProperty(PagePath.TOP);

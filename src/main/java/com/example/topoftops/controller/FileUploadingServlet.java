@@ -43,8 +43,16 @@ public class FileUploadingServlet extends HttpServlet {
     private static final String BUNDLE_NAME = "path";
     private static final String PATH_IMG = "path.img";
     private static final String FORMAT_DELIMITER = "\\.";
+    private static final String REGEX_FILE_NAME = "[^a-zA-Z0-9а-яёА-ЯЁ]";
 
-
+    /**
+     * Processes get requests and upload file to client
+     *
+     * @param request  {@link HttpServletRequest}
+     * @param response {@link HttpServletResponse}
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -58,6 +66,14 @@ public class FileUploadingServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Processes post requests and upload file to folder
+     *
+     * @param request  {@link HttpServletRequest}
+     * @param response {@link HttpServletResponse}
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -65,17 +81,38 @@ public class FileUploadingServlet extends HttpServlet {
         try {
             String path = ResourceBundle.getBundle(BUNDLE_NAME).getString(PATH_IMG);
             String title = request.getParameter(PARAM_NAME_TITLE);
+            String desc = request.getParameter(PARAM_NAME_DESCRIPTION);
             Part file = request.getPart(PARAM_NAME_IMAGE_NAME);
-            String imageName = title + "_" + file.getSubmittedFileName();
-            file.write(path + File.separator + imageName);
-            request.setAttribute(PARAM_NAME_IMAGE_NAME,imageName);
-        } catch (Exception ex) {//fixme add custom exception
-            request.setAttribute("message", "File Upload Failed due to " + ex);
+            String fileName = file.getSubmittedFileName();
+            if (!fileName.equals("")) {
+                String fileFormat = fileName.split(FORMAT_DELIMITER)[1];
+                String imageName = title.replaceAll(REGEX_FILE_NAME, "") + "." + fileFormat;
+                request.setAttribute(PARAM_NAME_IMAGE_NAME, imageName);
+                file.write(path + File.separator + imageName);
+            } else {
+                String imageName = "default.png";
+                request.setAttribute(PARAM_NAME_IMAGE_NAME, imageName);
+            }
+        } catch (Exception ex) {
+            request.setAttribute("error-message", "File Upload Failed due to " + ex);
         }
+        processRequest(request, response);
+    }
 
+    /**
+     * Processes get and post requests
+     *
+     * @param request  {@link HttpServletRequest}
+     * @param response {@link HttpServletResponse}
+     * @throws ServletException
+     * @throws IOException
+     */
+    private void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         RequestHelper requestHelper = RequestHelper.getInstance();
-        String action = request.getParameter(PARAM_NAME_COMMAND);
-        Command command = requestHelper.getCommand(action);
+        String commandName = request.getParameter(PARAM_NAME_COMMAND);
+        Command command = requestHelper.getCommand(commandName);
+        request.setAttribute(PARAM_NAME_COMMAND, commandName);
         Router router = command.execute(request);
         switch (router.getRouteType()) {
             case REDIRECT:
@@ -86,7 +123,7 @@ public class FileUploadingServlet extends HttpServlet {
                 dispatcher.forward(request, response);
                 break;
             default:
-                logger.log(Level.ERROR,"incorrect route type " + router.getRouteType());
+                logger.log(Level.ERROR, "incorrect route type " + router.getRouteType());
                 String page = ConfigurationManager.getProperty(PagePath.INDEX);
                 response.sendRedirect(request.getContextPath() + page);
         }

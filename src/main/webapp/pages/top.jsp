@@ -12,19 +12,30 @@
 <fmt:setBundle basename="pagecontent"/>
 <html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
 <script>
     function addInput() {
-            var str = '<input type="text" name="description" id="description" placeholder="Description"><input type ="submit" id="submitR" class="submit">';
-            document.getElementById('input').innerHTML = str;
-            document.getElementById ("submitR").addEventListener ("click", addReport, false);
+        var str = '<input type="text" name="description" id="description" placeholder="<fmt:message key="label.report"/>" required pattern="^[a-zA-Zа-яА-Я-\\s]{1,100}$"><input type ="submit" id="submitR" value="<fmt:message key="label.send"/>" class="submit">';
+        document.getElementById('input').innerHTML = str;
+        document.getElementById("submitR").addEventListener("click", addReport, false);
     }
+
     function addReport() {
         var desc = document.getElementById('description').value;
         var topId = document.getElementById('topId').value;
         var command = "add_report"
-        var str = '<input type ="submit" value="report" id="submitR" class="submit">';
+        var str = '<input type ="submit" value="<fmt:message key="label.report"/>" id="submitR" class="submit" >';
         document.getElementById('input').innerHTML = str;
-        document.getElementById ("submitR").addEventListener ("click", addInput, false);
+        document.getElementById("submitR").addEventListener("click", addInput, false);
         var userObj = {
             "description": desc,
             "command": command,
@@ -36,15 +47,16 @@
             url: url,
             method: "post",
             data: userObj,
-            error: function(message) {
+            error: function (message) {
                 console.log(message);
             },
-            success: function(data) {
+            success: function (data) {
                 console.log(data);
 
             }
         });
     }
+
     function like() {
         var topId = document.getElementById('topId').value;
         var command = "estimate_as_like"
@@ -58,15 +70,16 @@
             url: url,
             method: "post",
             data: userObj,
-            error: function(message) {
+            error: function (message) {
                 console.log(message);
             },
-            success: function(data) {
+            success: function (data) {
                 console.log(data);
 
             }
         });
     }
+
     function dislike() {
         var topId = document.getElementById('topId').value;
         var command = "estimate_as_dislike"
@@ -80,65 +93,241 @@
             url: url,
             method: "post",
             data: userObj,
-            error: function(message) {
+            error: function (message) {
                 console.log(message);
             },
-            success: function(data) {
+            success: function (data) {
                 console.log(data);
 
             }
         });
 
     }
+
+    function createItem() {
+        document.getElementById('itemCreateForm').submit();
+
+    }
+
+    function deleteItem(itemId) {
+        var topId = document.getElementById('topId').value;
+
+        var command = "delete_item";
+        var userObj = {
+            "command": command,
+            "topid": topId,
+            "itemid": itemId
+        }
+
+
+        var url = "http://localhost:8080${pageContext.request.contextPath}/controller";
+
+        $.ajax({
+            url: url,
+            method: "post",
+            data: userObj,
+            error: function (message) {
+                console.log(message);
+
+            },
+            success: function (data) {
+                console.log(data);
+
+                $("body").html(data);
+
+
+            }
+        });
+    }
+
+    function downItem(itemId) {
+        var topId = document.getElementById('topId').value;
+
+        var command = "change_item_place";
+        var userObj = {
+            "command": command,
+            "topid": topId,
+            "itemid": itemId,
+            "count": -1
+        }
+
+
+        var url = "http://localhost:8080${pageContext.request.contextPath}/controller";
+
+        $.ajax({
+            url: url,
+            method: "post",
+            data: userObj,
+            error: function (message) {
+                console.log(message);
+
+            },
+            success: function (data) {
+                console.log(data);
+
+                $("body").html(data);
+
+            }
+        });
+    }
+
+    function upItem(itemId) {
+        var topId = document.getElementById('topId').value;
+
+        var command = "change_item_place";
+        var userObj = {
+            "command": command,
+            "topid": topId,
+            "itemid": itemId,
+            "count": 1
+        }
+
+
+        var url = "http://localhost:8080${pageContext.request.contextPath}/controller";
+
+        $.ajax({
+            url: url,
+            method: "post",
+            data: userObj,
+            error: function (message) {
+                console.log(message);
+
+            },
+            success: function (data) {
+                console.log(data);
+
+                $("body").html(data);
+
+            }
+        });
+    }
+
+    function updateItem(itemId) {
+        var title = document.getElementById('title' + itemId).value;
+        var description = document.getElementById('description' + itemId).value;
+
+        var command = "update_item";
+        var userObj = {
+            "command": command,
+            "description": description,
+            "itemid": itemId,
+            "title": title
+        }
+
+
+        var url = "http://localhost:8080${pageContext.request.contextPath}/controller";
+
+        $.ajax({
+            url: url,
+            method: "post",
+            data: userObj,
+            error: function (message) {
+                console.log(message);
+
+            },
+            success: function (data) {
+                console.log(data);
+
+                $("body").html(data);
+
+            }
+        });
+    }
 </script>
+<jsp:include page="header.jsp"/>
 <head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
     <title>${top.getTitle()}</title>
 
 </head>
 <body>
 <input id="error_message" type="hidden" value="${error_message}"/>
-<%--fixme get path from resources--%>
-<img src="${pageContext.request.contextPath}/upload?imageName=${top.getImage()}" height="50" width="50" alt="${top.getImage()}">
-Title : ${top.getTitle()}
-DESCRIPTION : ${top.getDescription()}
-    <input type="hidden" name="topid" id="topId" value="${top.getId()}"/>
-<c:if test="${top.getUser() != sessionScope.user.getId()}">
+<input id="refreshed" value="no" type="hidden"/>
+<img src="${pageContext.request.contextPath}/upload?imageName=${top.getImage()}" height="150px" width="150px"
+     alt="${top.getImage()}">
+<p><fmt:message key="label.title"/> : ${top.getTitle()}</p>
+<p><fmt:message key="label.description"/> : ${top.getDescription()}</p>
+<input type="hidden" name="topid" id="topId" value="${top.getId()}"/>
+<c:if test="${top.getUser() != sessionScope.user.getId() && sessionScope.user != null && sessionScope.user.getStatus() == 1}">
     <div id="input">
-    <input type ="submit" value="report" class="submit"  id="submitR" onclick="addInput()" >
+        <input type="submit" value="<fmt:message key="label.report"/>" class="submit" id="submitR" onclick="addInput()">
     </div>
-<%--fixme add check if user has voted already --%>
     <div>
-        <input type ="submit" value="like" class="submit"  id="like" onclick="like()" >
-        <input type ="submit" value="dislike" class="submit"  id="dislike" onclick="dislike()" >
+        <input type="submit" value="<fmt:message key="label.like"/>" class="submit" id="like" onclick="like()">
+        <input type="submit" value="<fmt:message key="label.dislike"/>" class="submit" id="dislike" onclick="dislike()">
     </div>
+</c:if>
+
+</br>
+</br>
+<c:if test="${top.getUser() == sessionScope.user.getId() || sessionScope.user.getRole() == 1 }">
+    <form name="topForm" id="deleteForm" action="controller" method="post" enctype="">
+        <input type="hidden" name="command" value="delete_top"/>
+        <input type="hidden" name="topid" value="${top.getId()}"/>
+        <input type="submit" name="submit" value="<fmt:message key="label.delete"/>">
+    </form>
+    <form name="topForm" id="itemCreateForm" action="upload" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="command" value="create_item"/>
+        <input type="hidden" name="topid" value="${top.getId()}"/>
+        <input type="text" name="title" id="itemTitle" value="" placeholder="<fmt:message key="label.title"/>"
+               maxlength="15" required pattern="^[a-zA-Zа-яА-Я-\s\d]{1,15}$">
+        <input type="text" name="description" id="itemDescription" value=""
+               placeholder="<fmt:message key="label.description"/>" maxlength="40" required
+               pattern="^[a-zA-Zа-яА-Я-\s\d]{1,40}$">
+        <label for="file"><fmt:message key="label.choose_file_to_upload"/></label>
+        <input type="file" id="file" name="imageName">
+    </form>
+    <input type="submit" name="submit" onclick="createItem()" value="<fmt:message key="label.add_item"/>">
 </c:if>
 </br>
 </br>
-<form name="topForm" action="upload" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="command" value="create_item"/>
-    <input type="hidden" name="topid" value="${top.getId()}"/>
-    <input type="text" name="title" value="" placeholder="title" maxlength="45" required >
-    <input type="text" name="description" value="" placeholder="description" maxlength="200" >
-    <label for="file">Choose file to upload</label>
-    <input type="file" id="file" name="imageName" >
-    <input type="submit" name="submit" value="<fmt:message key="label.add_item"/>">
-</form>
-</br>
-</br>
-<c:forEach var="item" items="${top.getItems()}" varStatus="status">
-<form name="topForm" action="controller" method="post">
-    <input type="hidden" name="command" value="delete_item"/>
-    <input type="hidden" name="itemid" value="${item.getId()}"/>
-    <input type="hidden" name="topid" value="${top.getId()}"/>
-<%--    fixme should i use hidden or smth else--%>
-    <img src="${pageContext.request.contextPath}/upload?imageName=${item.getImage()}" height="50" width="50" alt="${item.getImage()}">
-    <p> Title: <c:out value="${item.getTitle()}" /></p>
-    <p> Description: <c:out value="${item.getDescription()}" /></p>
-    <input type="submit" name="delete" value="<fmt:message key="label.delete"/>">
-    </br>
-    </br>
-</form>
-</c:forEach>
+<c:if test="${top.getUser() == sessionScope.user.getId() || sessionScope.user.getRole() == 1 }">
+    <c:forEach var="item" items="${top.getItems()}" varStatus="status">
 
+        <img src="${pageContext.request.contextPath}/upload?imageName=${item.getImage()}" height="50" width="50"
+             alt="${item.getImage()}">
+        <p>
+                <fmt:message key="label.title"/> : <input type="text" id="title${item.getId()}"
+                                                          value="${item.getTitle()}" maxlength="15"
+                                                          pattern="^[a-zA-Zа-яА-Я-\s\d]{1,15}$"/>
+        <p><fmt:message key="label.description"/> : <input type="text" id="description${item.getId()}"
+                                                           value="${item.getDescription()} " maxlength="40"
+                                                           pattern="^[a-zA-Zа-яА-Я-\s\d]{1,40}$"/></p>
+        <p><fmt:message key="label.place"/> : <c:out value="${item.getPlace()}"/></p>
+        <button type="button" id="buttonR" class="btn btn-outline-dark" onclick="upItem(${item.getId()})">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                 class="bi bi-arrow-down-square" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                      d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.5 2.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z"></path>
+            </svg>
+        </button>
+        <button type="button" id="buttonR" class="btn btn-outline-dark" onclick="downItem(${item.getId()})">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                 class="bi bi-arrow-up-square" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                      d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.5 9.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"></path>
+            </svg>
+        </button>
+
+        <input type="submit" name="save" onclick="updateItem(${item.getId()})" value="<fmt:message key="label.save"/>">
+        <input type="submit" name="delete" onclick="deleteItem(${item.getId()})"
+               value="<fmt:message key="label.delete"/>">
+        </br>
+        </br>
+
+
+    </c:forEach>
+</c:if>
+<c:if test="${(top.getUser() != sessionScope.user.getId() && sessionScope.user.getRole() != 1 ) || sessionScope.user == null }">
+    <c:forEach var="item" items="${top.getItems()}" varStatus="status">
+        <img src="${pageContext.request.contextPath}/upload?imageName=${item.getImage()}" height="50" width="50"
+             alt="${item.getImage()}">
+        <p><fmt:message key="label.title"/> : <c:out value="${item.getTitle()}"/></p>
+        <p><fmt:message key="label.description"/> : <c:out value="${item.getDescription()}"/></p>
+        <p><fmt:message key="label.place"/> : <c:out value="${item.getPlace()}"/></p>
+    </c:forEach>
+</c:if>
 </body>
 </html>

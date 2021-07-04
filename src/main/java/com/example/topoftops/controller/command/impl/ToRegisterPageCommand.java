@@ -7,6 +7,12 @@ import com.example.topoftops.controller.command.ConfigurationManager;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * The command is responsible for going to register page
+ *
+ * @author Ilya Tsvetkov
+ * @see Command
+ */
 public class ToRegisterPageCommand implements Command {
     public ToRegisterPageCommand() {
     }

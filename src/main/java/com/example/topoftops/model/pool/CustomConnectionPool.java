@@ -1,5 +1,6 @@
 package com.example.topoftops.model.pool;
 
+import com.example.topoftops.exception.ConnectionPoolException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,6 +18,11 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import static com.example.topoftops.model.pool.ConnectionCreator.bundle;
 
+/**
+ * Pool of connections used while the system is running
+ *
+ * @author Ilya Tsvetkov
+ */
 public class CustomConnectionPool {
     private static final Logger logger = LogManager.getLogger();
     private static boolean isCreated;
@@ -25,8 +31,8 @@ public class CustomConnectionPool {
     private static final String DB_POOLSIZE = "db.poolsize";
     private static final int POOL_SIZE;
     private static CustomConnectionPool instance;
-    private BlockingQueue<Connection> freeConnection;
-    private BlockingQueue<Connection> givenAwayConnection;
+    private BlockingQueue<ProxyConnection> freeConnection;
+    private BlockingQueue<ProxyConnection> givenAwayConnection;
 
     static {
         POOL_SIZE = Integer.parseInt(bundle.getString(DB_POOLSIZE));
@@ -48,6 +54,11 @@ public class CustomConnectionPool {
         }
     }
 
+    /**
+     * Gets instance of this class
+     *
+     * @return {@link CustomConnectionPool} instance
+     */
     public static CustomConnectionPool getInstance() {
         if (!isCreated) {
             try {
@@ -63,9 +74,14 @@ public class CustomConnectionPool {
         return instance;
     }
 
-
+    /**
+     * Gets a connection from the connection pool
+     *
+     * @return {@link Connection} connection to the database
+     * @throws ConnectionPoolException if {@link InterruptedException} occurs
+     */
     public Connection getConnection() {
-        Connection connection = null;
+        ProxyConnection connection = null;
         try {
             connection = freeConnection.take();
             givenAwayConnection.put(connection);
@@ -75,28 +91,44 @@ public class CustomConnectionPool {
         return connection;
     }
 
+    /**
+     * Returns the connection to the connection pool
+     *
+     * @param connection {@link Connection} connection to the database
+     */
     public void releaseConnection(Connection connection) {
-        if (connection.getClass() == ProxyConnection.class && givenAwayConnection.remove(connection)) {
+        if (givenAwayConnection.remove(connection)) {
             try {
-                freeConnection.put(connection);
+                freeConnection.put((ProxyConnection) connection);
             } catch (InterruptedException e) {
                 logger.log(Level.WARN, e.getMessage());
             }
         }
     }
 
+    /**
+     * Destroy connection pool
+     *
+     * @throws ConnectionPoolException if {@link InterruptedException} or
+     *                                 {@link SQLException} occurs
+     */
     public void destroyPool() {
         for (int i = 0; i < POOL_SIZE; i++) {
             try {
                 ProxyConnection connection = (ProxyConnection) freeConnection.take();
                 connection.reallyClose();
-            } catch (InterruptedException e) {
+            } catch (InterruptedException | SQLException e) {
                 logger.log(Level.WARN, e.getMessage());
             }
         }
         deregisterDrivers();
     }
 
+    /**
+     * Unregisters drivers
+     *
+     * @throws ConnectionPoolException if {@link SQLException} occurs
+     */
     public void deregisterDrivers() {
         Enumeration<Driver> drivers = DriverManager.getDrivers();
         while (drivers.hasMoreElements()) {

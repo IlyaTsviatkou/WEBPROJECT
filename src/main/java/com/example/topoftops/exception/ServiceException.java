@@ -1,6 +1,12 @@
 package com.example.topoftops.exception;
 
-public class ServiceException extends Exception{
+/**
+ * Describes exception in Service
+ *
+ * @author Ilya Tsvetkov
+ * @see Exception
+ */
+public class ServiceException extends Exception {
     public ServiceException() {
         super();
     }

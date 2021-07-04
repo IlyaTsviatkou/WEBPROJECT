@@ -1,5 +1,8 @@
 package com.example.topoftops.model.dao;
 
+/**
+ * Describes all column names
+ */
 public class ColumnName {
     public static final String USER_TABLE = "users";
     public static final String TOP_TABLE = "tops";
@@ -16,6 +19,7 @@ public class ColumnName {
     public static final String COLUMN_STATUS = "status";
     public static final String COLUMN_TITLE = "title";
     public static final String COLUMN_MARK = "mark";
+    public static final String COLUMN_PLACE = "place";
     public static final String COLUMN_COUNT_ID = "Count(id)";
 
     public static final String COLUMN_USER = "user";

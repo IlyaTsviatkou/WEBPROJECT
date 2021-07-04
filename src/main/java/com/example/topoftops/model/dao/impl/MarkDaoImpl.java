@@ -5,6 +5,7 @@ import com.example.topoftops.entity.Top;
 import com.example.topoftops.exception.DaoException;
 import com.example.topoftops.model.dao.MarkDao;
 import com.example.topoftops.model.pool.CustomConnectionPool;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,23 +31,24 @@ public class MarkDaoImpl implements MarkDao {
 
     @Override
     public boolean create(Mark mark) throws DaoException {
-        int numberEffectedRows =0;
+        int numberEffectedRows = 0;
         try (Connection connection = CustomConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_CREATE)) {
             preparedStatement.setLong(1, mark.getTop());
             preparedStatement.setLong(2, mark.getUser());
             preparedStatement.setInt(3, mark.getMark());
-            preparedStatement.setInt(4,mark.getMark());
+            preparedStatement.setInt(4, mark.getMark());
             numberEffectedRows = preparedStatement.executeUpdate();
         } catch (SQLException e) {
+            logger.log(Level.WARN,e);
             throw new DaoException(e);
         }
-        return (numberEffectedRows!=2);
+        return (numberEffectedRows != 2);
     }
 
     @Override
     public boolean isExist(Mark mark) throws DaoException {
-        int count =0;
+        int count = 0;
         try (Connection connection = CustomConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COUNT_MARK)) {
             preparedStatement.setLong(1, mark.getUser());
@@ -57,8 +59,9 @@ public class MarkDaoImpl implements MarkDao {
                 count = resultSet.getInt(COLUMN_COUNT_ID);
             }
         } catch (SQLException e) {
+            logger.log(Level.WARN,e);
             throw new DaoException(e);
         }
-        return (count==1);
+        return (count == 1);
     }
 }

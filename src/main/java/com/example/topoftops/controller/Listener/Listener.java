@@ -9,6 +9,12 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+/**
+ * Application listener
+ *
+ * @author Ilya Tsvetkov
+ * @see ServletContextListener
+ */
 public class Listener implements ServletContextListener {
     private static final Logger logger = LogManager.getLogger();
 

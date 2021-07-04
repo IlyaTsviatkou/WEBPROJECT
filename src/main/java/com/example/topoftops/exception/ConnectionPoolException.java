@@ -1,6 +1,12 @@
 package com.example.topoftops.exception;
 
-public class ConnectionPoolException extends Exception{
+/**
+ * Describes exception in ConnectionPool
+ *
+ * @author Ilya Tsvetkov
+ * @see Exception
+ */
+public class ConnectionPoolException extends Exception {
     public ConnectionPoolException() {
         super();
     }

@@ -5,24 +5,41 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
+/**
+ * Class wrapper for connection, changed the body of method close of class
+ * Connection, add method reallyClose
+ *
+ * @author Ilya Tsvetkov
+ * @see Connection
+ */
 public class ProxyConnection implements Connection {
     private Connection connection;
+
+    /**
+     * Constructs a new ProxyConnection with the specified connection
+     *
+     * @param connection {@link Connection} connection to the database
+     */
     ProxyConnection(Connection connection) {
         this.connection = connection;
-    };
+    }
+
+    ;
 
     @Override
     public void close() throws SQLException {
-        CustomConnectionPool.getInstance().releaseConnection(connection);
+        CustomConnectionPool.getInstance().releaseConnection(this);
     }
 
-    void reallyClose() {
-        try {
-            connection.close();
-        } catch (SQLException throwable) {
-            throwable.printStackTrace();
-        }
+    /**
+     * Closes the connection to the database
+     *
+     * @throws SQLException
+     */
+    void reallyClose() throws SQLException {
+        connection.close();
     }
+
     @Override
     public Statement createStatement() throws SQLException {
         return connection.createStatement();
@@ -277,8 +294,6 @@ public class ProxyConnection implements Connection {
     public int getNetworkTimeout() throws SQLException {
         return connection.getNetworkTimeout();
     }
-
-
 
 
     @Override

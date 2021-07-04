@@ -32,12 +32,8 @@ public class ReportDaoImpl implements ReportDao {
             COLUMN_DESCRIPTION + ", " +
             COLUMN_USER + " FROM " +
             REPORT_TABLE;
-    private static final String SQL_SELECT_ALL_REPORTS_BY_TOP = "SELECT " + COLUMN_ID + ", " +
-            COLUMN_TOP + ", " +
-            COLUMN_DESCRIPTION + ", " +
-            COLUMN_USER + " FROM " +
-            REPORT_TABLE + " WHERE " +
-            COLUMN_TOP + " like ?";
+    private static final String SQL_DELETE_BY_TOP = "DELETE FROM " + REPORT_TABLE +
+            " where " + COLUMN_TOP + " =?";
     private static final String SQL_DELETE_BY_ID = "DELETE FROM " + REPORT_TABLE +
             " where " + COLUMN_ID + " =?";
 
@@ -50,6 +46,17 @@ public class ReportDaoImpl implements ReportDao {
             preparedStatement.setString(3, report.getDescription());
             preparedStatement.setLong(4, report.getUser());
             preparedStatement.setLong(5, report.getTop());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
+    public void deleteByTop(long top) throws DaoException {
+        try (Connection connection = CustomConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_BY_TOP)) {
+            preparedStatement.setLong(1, top);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);

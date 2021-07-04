@@ -1,6 +1,12 @@
 package com.example.topoftops.exception;
 
-public class DaoException extends Exception{
+/**
+ * Describes exception in Dao
+ *
+ * @author Ilya Tsvetkov
+ * @see Exception
+ */
+public class DaoException extends Exception {
     public DaoException() {
         super();
     }

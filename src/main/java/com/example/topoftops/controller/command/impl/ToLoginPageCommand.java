@@ -7,6 +7,12 @@ import com.example.topoftops.controller.command.ConfigurationManager;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * The command is responsible for login page
+ *
+ * @author Ilya Tsvetkov
+ * @see Command
+ */
 public class ToLoginPageCommand implements Command {
     public ToLoginPageCommand() {
     }

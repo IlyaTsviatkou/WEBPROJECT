@@ -3,6 +3,7 @@ package com.example.topoftops.util;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -10,7 +11,11 @@ import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-
+/**
+ * The utility is responsible for sending messages
+ *
+ * @author Ilya Tsvetkov
+ */
 public class MailSender {
     private static final Logger logger = LogManager.getLogger();
     private static final String MAIL_PROPERTIES = "mail.properties";
@@ -31,6 +36,14 @@ public class MailSender {
     private MailSender() {
     }
 
+    /**
+     * Sends message
+     *
+     * @param email          {@link String} recipient email
+     * @param messageSubject {@link String} message subject
+     * @param messageText    {@link String} message text
+     * @return boolean true if if the message is sent, else false
+     */
     public static void send(String email, String messageSubject, String messageText) {
         if (email == null || messageSubject == null || messageText == null) {
             logger.error("cant send message");
@@ -50,7 +63,7 @@ public class MailSender {
             message.setText(messageText);
             Transport.send(message);
         } catch (MessagingException e) {
-            logger.log(Level.ERROR,e);
+            logger.log(Level.ERROR, e);
         }
     }
 }

@@ -11,24 +11,21 @@ import java.util.Base64;
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
 
+/**
+ * The utility is responsible for encrypting
+ *
+ * @author Ilya Tsvetkov
+ */
 public class Encryptor {
     private static Logger logger = LogManager.getLogger();
-    private static SecretKey key;
-    private static IvParameterSpec ivParameterSpec ;
-    private static String algorithm ;
+    private static int key = 8;
 
-    static {
-        try {
-            key = generateKey(128);
-            ivParameterSpec = generateIv();
-            algorithm = "AES/CBC/PKCS5Padding";
-        } catch (NoSuchAlgorithmException e) {
-            logger.log(Level.ERROR,e);
-        }
-    }
-
-
-
+    /**
+     * Encrypts
+     *
+     * @param str {@link String} password
+     * @return {@link String} encrypted password
+     */
     public static String encrypt(String str) {
         MessageDigest messageDigest = null;
         byte[] bytesEncoded = null;
@@ -44,46 +41,64 @@ public class Encryptor {
         return resHex;
     }
 
-    public static IvParameterSpec generateIv() {
-        byte[] iv = new byte[16];
-        new SecureRandom().nextBytes(iv);
-        return new IvParameterSpec(iv);
-    }
 
-    public static SecretKey generateKey(int n) throws NoSuchAlgorithmException {
-        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
-        keyGenerator.init(n);
-        SecretKey key = keyGenerator.generateKey();
-        return key;
-    }
-
+    /**
+     * Encrypts string
+     *
+     * @param input {@link String} password
+     * @return {@link String} encrypted password
+     */
     public static String encryptC(String input) {
-        String result;
-        try {
-            Cipher cipher = Cipher.getInstance(algorithm);
-            cipher.init(Cipher.ENCRYPT_MODE, key, ivParameterSpec);
-            byte[] cipherText = cipher.doFinal(input.getBytes());
-            result = Base64.getEncoder().encodeToString(cipherText);
-        } catch (NoSuchAlgorithmException | InvalidKeyException | InvalidAlgorithmParameterException | NoSuchPaddingException | BadPaddingException | IllegalBlockSizeException e) {
-            logger.log(Level.ERROR,e);
-            result="0";
+        String string = "";
+        for (int i = 0; i < input.length(); i++) {
+            char c = input.charAt(i);
+            if (c >= 'a' && c <= 'z') {
+                c += key % 26;
+                if (c < 'a')
+                    c += 26;
+                if (c > 'z')
+                    c -= 26;
+            } else if (c >= 'A' && c <= 'Z') {
+                c += key % 26;
+                if (c < 'A')
+                    c += 26;
+                if (c > 'Z')
+                    c -= 26;
+            }
+            string += c;
         }
-        return result;
+        return string;
     }
 
-    public static String decryptC(String cipherText) {
+    /**
+     * Decrypt string
+     *
+     * @param input {@link String} cipherText
+     * @return {@link String} encrypted password
+     */
+    public static String decryptC(String input) {
         String result;
-        try {
-            Cipher cipher = Cipher.getInstance(algorithm);
-            cipher.init(Cipher.DECRYPT_MODE, key, ivParameterSpec);
-            byte[] plainText = cipher.doFinal(Base64.getDecoder()
-                    .decode(cipherText));
-            result = Base64.getEncoder().encodeToString(plainText);
-        } catch (NoSuchAlgorithmException | InvalidKeyException | InvalidAlgorithmParameterException | NoSuchPaddingException | BadPaddingException | IllegalBlockSizeException e) {
-            logger.log(Level.ERROR,e);
-            result = "0";
+        int k = Integer.parseInt("-" + key);
+        String string = "";
+        for (int i = 0; i < input.length(); i++) {
+            char c = input.charAt(i);
+            if (c >= 'a' && c <= 'z') {
+                c += k % 26;
+                if (c < 'a')
+                    c += 26;
+                if (c > 'z')
+                    c -= 26;
+            } else if (c >= 'A' && c <= 'Z') {
+                c += k % 26;
+                if (c < 'A')
+                    c += 26;
+                if (c > 'Z')
+                    c -= 26;
+            }
+            string += c;
+
         }
-        return result;
+        return string;
     }
 }
 

@@ -1,4 +1,5 @@
 package com.example.topoftops.model.pool;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -8,6 +9,11 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * The ConnectionCreator is responsible for for creating connections
+ *
+ * @author Ilya Tsvetkov
+ */
 final class ConnectionCreator {
     private static Logger logger = LogManager.getLogger();
     private static final String BUNDLE_NAME = "database";
@@ -36,6 +42,12 @@ final class ConnectionCreator {
     private ConnectionCreator() {
     }
 
+    /**
+     * Creates a connection to the database
+     *
+     * @return {@link Connection} connection to the database
+     * @throws SQLException
+     */
     static Connection createConnection() throws SQLException {
         return DriverManager.getConnection(DATABASE_URL, DATABASE_USER_NAME, DATABASE_PASSWORD);
     }
