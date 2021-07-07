@@ -19,7 +19,14 @@ public class UserService {
     private static final Logger logger = LogManager.getLogger();
     private static final String INFO_MESSAGE_SUBJECT_CONFIRMATION = "CONFIRM YOUR ACCOUNT";
     private UserDaoImpl dao = new UserDaoImpl();
-    
+
+    /**
+     * authorisation of user
+     * @param login
+     * @param password
+     * @return
+     * @throws ServiceException
+     */
     public Optional<User> login(String login, String password) throws ServiceException {
         Optional<User> user = Optional.empty();
         if(UserInfoValidator.isValidPassword(password) && UserInfoValidator.isValidLogin(login)) {
@@ -34,6 +41,12 @@ public class UserService {
         return user;
     }
 
+    /**
+     * send message to email
+     * @param email
+     * @param message
+     * @return
+     */
     public boolean sendMessage(String email, String message) {
         boolean result = false;
         if(UserInfoValidator.isValidEmail(email)) {
@@ -43,6 +56,13 @@ public class UserService {
         }
         return result;
     }
+
+    /**
+     * find users by nickname
+     * @param userName
+     * @return
+     * @throws ServiceException
+     */
     public List<User> findUsersByName(String userName) throws ServiceException {
         try {
             if(InputInfoValidator.isValidSearch(userName)) {
@@ -57,6 +77,13 @@ public class UserService {
             throw new ServiceException(e);
         }
     }
+
+    /**
+     * register user
+     * @param user
+     * @return
+     * @throws ServiceException
+     */
     public boolean register(User user) throws ServiceException {
         boolean result = true;
         if(UserInfoValidator.isValidPassword(user.getPassword()) && UserInfoValidator.isValidLogin(user.getLogin())) {
@@ -72,6 +99,12 @@ public class UserService {
         return result;
     }
 
+    /**
+     * activate user by message from email
+     * @param userId
+     * @return
+     * @throws ServiceException
+     */
     public boolean activate(String userId) throws ServiceException {
         String login = Encryptor.decryptC(userId);
         boolean result = false;
@@ -84,6 +117,11 @@ public class UserService {
         return result;
     }
 
+    /**
+     * block user by id
+     * @param userId
+     * @throws ServiceException
+     */
     public void block(String userId) throws ServiceException {
         try {
             dao.updateStatusById(userId,2);
@@ -92,6 +130,12 @@ public class UserService {
             throw new ServiceException(e);
         }
     }
+
+    /**
+     * unblock user by id
+     * @param userId
+     * @throws ServiceException
+     */
     public void unblock(String userId) throws ServiceException {
         try {
             dao.updateStatusById(userId,1);
@@ -100,6 +144,12 @@ public class UserService {
             throw new ServiceException(e);
         }
     }
+
+    /**
+     * delete user by id
+     * @param userId
+     * @throws ServiceException
+     */
     public void delete(String userId) throws ServiceException {
         try {
             dao.updateStatusById(userId,3);

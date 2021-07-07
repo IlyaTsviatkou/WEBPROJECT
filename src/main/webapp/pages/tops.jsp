@@ -141,7 +141,7 @@
             </button>
         </div>
     </div>
-    <div id="tops" class="row mb-3" style="width: 75%">
+    <div id="tops" class="row mb-3" style="width: 75% ">
         <c:forEach var="top" items="${tops}" varStatus="status">
             <div class="col-3">
                 <form action="controller" method="post" id="${top.getId()}" name="${top.getId()}">

@@ -48,7 +48,7 @@ public class DeleteTopCommand implements Command {
             if (user.getId() == top.getUser() || user.getRole() == Role.ADMIN.ordinal()) {
                 itemService.deleteByTop(topId);
                 topService.delete(topId);
-                reportService.deleteReport(topId);
+                reportService.deleteReports(topId);
             } else {
                 logger.log(Level.ERROR, "user tried delete stranger top");
                 page = ConfigurationManager.getProperty(PagePath.INDEX);

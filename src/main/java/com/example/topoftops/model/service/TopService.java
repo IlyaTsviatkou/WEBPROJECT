@@ -17,6 +17,11 @@ public class TopService {
     private static final Logger logger = LogManager.getLogger();
     private TopDaoImpl dao = new TopDaoImpl();
 
+    /**
+     * create top
+     * @param top
+     * @throws ServiceException
+     */
     public void create(Top top) throws ServiceException {
         try {
             if (InputInfoValidator.isValidTitle(top.getTitle())
@@ -33,6 +38,12 @@ public class TopService {
 
     }
 
+    /**
+     * find top by title
+     * @param title
+     * @return
+     * @throws ServiceException
+     */
     public Optional<Top> findByTitle(String title) throws ServiceException {
         Optional<Top> top;
         try {
@@ -49,6 +60,12 @@ public class TopService {
         return top;
     }
 
+    /**
+     * find by id
+     * @param id
+     * @return
+     * @throws ServiceException
+     */
     public Optional<Top> findById(long id) throws ServiceException {
         Optional<Top> top = Optional.empty();
         try {
@@ -60,6 +77,12 @@ public class TopService {
         return top;
     }
 
+    /**
+     * update rating
+     * @param mark
+     * @param id
+     * @throws ServiceException
+     */
     public void updateRating(int mark, long id) throws ServiceException {
         try {
             dao.updateRating(mark, id);
@@ -69,6 +92,11 @@ public class TopService {
         }
     }
 
+    /**
+     * delete top by id
+     * @param id
+     * @throws ServiceException
+     */
     public void delete(long id) throws ServiceException {
         try {
             dao.delete(id);
@@ -78,6 +106,11 @@ public class TopService {
         }
     }
 
+    /**
+     * find all tops
+     * @return
+     * @throws ServiceException
+     */
     public List<Top> findAllTops() throws ServiceException {
         List<Top> list;
         try {
@@ -89,6 +122,12 @@ public class TopService {
         return list;
     }
 
+    /**
+     * find all tops by user id
+     * @param id
+     * @return
+     * @throws ServiceException
+     */
     public List<Top> findAllTopsByUser(long id) throws ServiceException {
         List<Top> list;
         try {
@@ -100,6 +139,12 @@ public class TopService {
         return list;
     }
 
+    /**
+     * search in tops by data
+     * @param data
+     * @return
+     * @throws ServiceException
+     */
     public List<Top> searchInTops(String data) throws ServiceException {
         List<Top> list;
         try {
@@ -116,6 +161,13 @@ public class TopService {
         return list;
     }
 
+    /**
+     * search tops by data with rating order
+     * @param data
+     * @param count
+     * @return
+     * @throws ServiceException
+     */
     public List<Top> searchInTopsWithRating(String data, int count) throws ServiceException {
         List<Top> list;
         try {

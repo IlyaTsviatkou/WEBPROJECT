@@ -13,6 +13,12 @@ public class MarkService {
     private static final Logger logger = LogManager.getLogger();
     private MarkDaoImpl markDao = new MarkDaoImpl();
 
+    /**
+     * create mark
+     * @param mark
+     * @return
+     * @throws ServiceException
+     */
     public boolean create(Mark mark) throws ServiceException {
         boolean result;
         try {
@@ -24,6 +30,12 @@ public class MarkService {
         return result;
     }
 
+    /**
+     * check if mark is exist
+     * @param mark
+     * @return
+     * @throws ServiceException
+     */
     public boolean isExist(Mark mark) throws ServiceException {
         boolean result;
         try {

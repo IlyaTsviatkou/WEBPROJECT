@@ -15,6 +15,11 @@ public class ReportService {
     private static final Logger logger = LogManager.getLogger();
     private ReportDaoImpl reportDao = new ReportDaoImpl();
 
+    /**
+     * create report
+     * @param report
+     * @throws ServiceException
+     */
     public void createReport(Report report) throws ServiceException {
         try {
             if (InputInfoValidator.isValidDescription(report.getDescription())) {
@@ -29,7 +34,12 @@ public class ReportService {
         }
     }
 
-    public void deleteReport(long top) throws ServiceException {
+    /**
+     * delete reports by top id
+     * @param top
+     * @throws ServiceException
+     */
+    public void deleteReports(long top) throws ServiceException {
         try {
             reportDao.deleteByTop(top);
         } catch (DaoException e) {
@@ -38,6 +48,11 @@ public class ReportService {
         }
     }
 
+    /**
+     * delete report by id
+     * @param id
+     * @throws ServiceException
+     */
     public void deleteReportById(long id) throws ServiceException {
         try {
             reportDao.delete(id);
@@ -47,6 +62,11 @@ public class ReportService {
         }
     }
 
+    /**
+     * find all reports
+     * @return
+     * @throws ServiceException
+     */
     public List<Report> findAllReports() throws ServiceException {
         List<Report> list;
         try {

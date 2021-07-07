@@ -17,6 +17,12 @@ public class ItemService {
     private static final Logger logger = LogManager.getLogger();
     private ItemDaoImpl dao = new ItemDaoImpl();
 
+    /**
+     * find items by top id
+     * @param id
+     * @return
+     * @throws ServiceException
+     */
     public ArrayList<Item> findItems(long id) throws ServiceException {
         ArrayList<Item> items;
         try {
@@ -28,6 +34,11 @@ public class ItemService {
         return items;
     }
 
+    /**
+     * Create item
+     * @param item
+     * @throws ServiceException
+     */
     public void create(Item item) throws ServiceException {
         try {
             int place = dao.findMaxPlace(item.getTop());
@@ -44,6 +55,11 @@ public class ItemService {
         }
     }
 
+    /**
+     * Delete item by id
+     * @param id
+     * @throws ServiceException
+     */
     public void delete(long id) throws ServiceException {
         try {
             Item item = dao.findItemById(id).get();
@@ -55,6 +71,11 @@ public class ItemService {
         }
     }
 
+    /**
+     * delete Item by top id
+     * @param top
+     * @throws ServiceException
+     */
     public void deleteByTop(long top) throws ServiceException {
         try {
             dao.deleteByTop(top);
@@ -64,6 +85,11 @@ public class ItemService {
         }
     }
 
+    /**
+     * update item
+     * @param item
+     * @throws ServiceException
+     */
     public void update(Item item) throws ServiceException {
         try {
             if (InputInfoValidator.isValidTitle(item.getTitle()) && InputInfoValidator.isValidDescription(item.getDescription())) {
@@ -78,6 +104,12 @@ public class ItemService {
         }
     }
 
+    /**
+     * cahnge place of item by 1 or -1
+     * @param id
+     * @param count
+     * @throws ServiceException
+     */
     public void changePlace(long id, int count) throws ServiceException {
         try {
             Optional<Item> itemOptional = dao.findItemById(id);
@@ -97,6 +129,12 @@ public class ItemService {
         }
     }
 
+    /**
+     * find item by id
+     * @param id
+     * @return
+     * @throws ServiceException
+     */
     public Item findItemById(long id) throws ServiceException {
         Item item;
         try {

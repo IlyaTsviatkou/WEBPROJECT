@@ -67,7 +67,10 @@ public class CustomConnectionPool {
                     instance = new CustomConnectionPool();
                     isCreated = true;
                 }
-            } finally {
+            } catch (RuntimeException e) {
+                throw new RuntimeException(e);
+            }
+            finally {
                 locker.unlock();
             }
         }

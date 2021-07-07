@@ -20,11 +20,24 @@ public class Listener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        CustomConnectionPool.getInstance();
+        try {
+            CustomConnectionPool.getInstance();
+            logger.log(Level.INFO, "connection pool successfully created");
+        } catch (RuntimeException e) {
+            logger.log(Level.ERROR, "couldn't create connection pool", e);
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
-        CustomConnectionPool.getInstance().destroyPool();
+        try {
+            CustomConnectionPool.getInstance().destroyPool();
+            logger.log(Level.INFO, "connection pool successfully destroyed");
+        } catch (RuntimeException e) {
+            logger.log(Level.ERROR, "couldn't destroy connection pool", e);
+            throw new RuntimeException(e);
+        }
     }
 }

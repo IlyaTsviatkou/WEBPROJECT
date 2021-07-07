@@ -12,7 +12,6 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 
 import static com.example.topoftops.controller.command.RequestParam.PARAM_NAME_TOP;
-import static com.example.topoftops.controller.command.RequestParam.PARAM_NAME_USER;
 
 /**
  * The command is responsible for accepting report
@@ -38,7 +37,7 @@ public class AcceptReportAjaxCommand implements AjaxCommand {
         try {
             itemService.deleteByTop(topId);
             topService.delete(topId);
-            reportService.deleteReport(topId);
+            reportService.deleteReports(topId);
         } catch (ServiceException e) {
             logger.log(Level.WARN, "couldnt accept report", e);
         }
