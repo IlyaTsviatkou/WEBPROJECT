@@ -85,12 +85,14 @@ public class UserService {
      * @throws ServiceException
      */
     public boolean register(User user) throws ServiceException {
-        boolean result = true;
-        if(UserInfoValidator.isValidPassword(user.getPassword()) && UserInfoValidator.isValidLogin(user.getLogin())) {
+        boolean result = false;
+        if(UserInfoValidator.isValidPassword(user.getPassword()) && UserInfoValidator.isValidLogin(user.getLogin())
+                && UserInfoValidator.isValidEmail(user.getEmail())) {
             String encryptedPass = Encryptor.encrypt(user.getPassword());
             user.setPassword(encryptedPass);
             try {
                 dao.register(user);
+                result = true;
             } catch (Exception e) {
                 logger.log(Level.WARN,e.getMessage());
                 throw new ServiceException(e);

@@ -19,9 +19,9 @@
 <form name="createTopForm" action="upload" method="post" enctype="multipart/form-data">
     <input type="hidden" name="command" value="create_top"/>
     <input type="text" name="title" value="" placeholder="<fmt:message key="label.title"/>" maxlength="45" required
-           pattern="^[a-zA-Zа-яА-Я-\s\d]{1,45}$">
+           pattern="^[a-zA-Zа-яА-Я-\s\d\p{P}]{1,45}$">
     <input type="text" name="description" value="" placeholder="<fmt:message key="label.description"/>" maxlength="200"
-           pattern="^[a-zA-Zа-яА-Я-\s\d]{1,200}$">
+           pattern="^[a-zA-Zа-яА-Я-\s\d\p{P}]{1,200}$">
     <label for="file"><fmt:message key="label.choose_file_to_upload"/></label>
     <input type="file" value="<fmt:message key="label.upload"/>" id="file" name="imageName">
     <br/>

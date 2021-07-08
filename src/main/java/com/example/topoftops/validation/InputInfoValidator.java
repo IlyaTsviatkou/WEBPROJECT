@@ -7,8 +7,8 @@ package com.example.topoftops.validation;
  */
 public class InputInfoValidator {
 
-    private static final String REGEXP_VALID_TITLE = "^[a-zA-Zа-яА-Я-\\s\\d]{1,15}$";
-    private static final String REGEXP_VALID_DESCRIPTION = "^[a-zA-Zа-яА-Я-\\s\\d]{1,40}$";
+    private static final String REGEXP_VALID_TITLE = "^[a-zA-Zа-яА-Я-\\s\\d\\p{P}]{1,15}$";
+    private static final String REGEXP_VALID_DESCRIPTION = "^[a-zA-Zа-яА-Я-\\s\\d\\p{P}]{1,40}$";
     private static final String REGEXP_VALID_SEARCH = "^[a-zA-Zа-яА-Я-\\s\\d]{0,15}$";
 
     private InputInfoValidator() {

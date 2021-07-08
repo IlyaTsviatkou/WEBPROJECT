@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" errorPage="pages/error.jsp" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <fmt:setLocale value="${locale}" scope="session"/>
 <fmt:setBundle basename="pagecontent"/>
 <!DOCTYPE html>
@@ -22,7 +22,7 @@
 <script>
     function getCheckedRadioValue(name) {
         var elements = document.getElementsByName(name);
-        for (var i=0, len=elements.length; i<len; ++i)
+        for (var i = 0, len = elements.length; i < len; ++i)
             if (elements[i].checked) return elements[i].value;
     }
 
@@ -33,7 +33,7 @@
 
         var userObj = {
             "command": command,
-            "language":language
+            "language": language
         }
 
 
@@ -57,40 +57,42 @@
     }
 
 </script>
-<jsp:include page="pages/header.jsp" />
+<jsp:include page="pages/header.jsp"/>
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <title>TOPOFTOPS!</title>
 </head>
 <body>
-<c:if test="${sessionScope.user.getRole() == 1}">
-<form name="toAdminPanelForm" action="controller" method="post">
-    <input type="hidden" name="command" value="to_admin_panel_page"/>
-    <input type="submit" name="submit" value="<fmt:message key="label.admin_panel"/>">
-</form>
-</c:if>
-<c:if test="${sessionScope.user.getLogin() != null && sessionScope.user.getStatus() == 1}">
-    <form name="topForm" action="controller" method="post">
-        <input type="hidden" name="command" value="to_create_top_page"/>
-        <input type="submit" name="submit" value="<fmt:message key="label.create_top"/>">
-    </form>
-    <br/>
-</c:if>
+</br>
+<div style="margin-left: 15px">
+    <c:if test="${sessionScope.user.getRole() == 1}">
+        <form name="toAdminPanelForm" action="controller" method="post">
+            <input type="hidden" name="command" value="to_admin_panel_page"/>
+            <input type="submit" name="submit" value="<fmt:message key="label.admin_panel"/>">
+        </form>
+    </c:if>
+    <c:if test="${sessionScope.user.getLogin() != null && sessionScope.user.getStatus() == 1}">
+        <form name="topForm" action="controller" method="post">
+            <input type="hidden" name="command" value="to_create_top_page"/>
+            <input type="submit" name="submit" value="<fmt:message key="label.create_top"/>">
+        </form>
+        <br/>
+    </c:if>
 
 
-<%--<form name="changeLocal" id="changeLocal" action="controller" method="post">--%>
+    <%--<form name="changeLocal" id="changeLocal" action="controller" method="post">--%>
     <p><b><fmt:message key="label.your_language"/></b></p>
     <input type="hidden" name="command" value="change_local"/>
-    <p><input name="language" type="radio" value="rus"> <fmt:message key="label.russian"/> </p>
-    <p><input name="language" type="radio" value="eng"> <fmt:message key="label.english"/> </p>
-<%--</form>--%>
-<p><input type="submit" onclick="changeLocal()" value="<fmt:message key="label.submit"/>"></p>
-<form name="toTopsForm" action="controller" method="post">
-    <input type="hidden" name="command" value="to_tops_page"/>
-    <input type="submit" class="btn btn-outline-secondary" value="<fmt:message key="label.tops"/>">
-</form>
+    <p><input name="language" type="radio" value="rus"> <fmt:message key="label.russian"/></p>
+    <p><input name="language" type="radio" value="eng"> <fmt:message key="label.english"/></p>
+    <%--</form>--%>
+    <p><input type="submit" onclick="changeLocal()" value="<fmt:message key="label.submit"/>"></p>
+    <form name="toTopsForm" action="controller" method="post">
+        <input type="hidden" name="command" value="to_tops_page"/>
+        <input type="submit" class="btn btn-outline-secondary" value="<fmt:message key="label.tops"/>">
+    </form>
 
-
+</div>
 </body>
 </html>

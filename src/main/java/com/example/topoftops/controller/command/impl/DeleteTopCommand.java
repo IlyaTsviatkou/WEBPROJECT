@@ -1,9 +1,6 @@
 package com.example.topoftops.controller.command.impl;
 
-import com.example.topoftops.controller.command.Command;
-import com.example.topoftops.controller.command.ConfigurationManager;
-import com.example.topoftops.controller.command.PagePath;
-import com.example.topoftops.controller.command.Router;
+import com.example.topoftops.controller.command.*;
 import com.example.topoftops.entity.User;
 import com.example.topoftops.entity.Role;
 import com.example.topoftops.entity.Top;
@@ -17,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static com.example.topoftops.controller.command.RequestParam.PARAM_ERROR_MESSAGE;
 import static com.example.topoftops.controller.command.RequestParam.PARAM_NAME_TOP;
 
 /**
@@ -40,7 +38,7 @@ public class DeleteTopCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request) {
         Router router;
-        String page = ConfigurationManager.getProperty(PagePath.INDEX);
+        String page = ConfigurationManager.getProperty(PagePath.ERROR);
         long topId = Long.parseLong(request.getParameter(PARAM_NAME_TOP));
         User user = (User) request.getSession().getAttribute("user");
         try {
@@ -49,12 +47,14 @@ public class DeleteTopCommand implements Command {
                 itemService.deleteByTop(topId);
                 topService.delete(topId);
                 reportService.deleteReports(topId);
+                page = ConfigurationManager.getProperty(PagePath.INDEX);
             } else {
                 logger.log(Level.ERROR, "user tried delete stranger top");
-                page = ConfigurationManager.getProperty(PagePath.INDEX);
+                request.getSession().setAttribute(PARAM_ERROR_MESSAGE, "user tried delete stranger top");
             }
         } catch (ServiceException e) {
-            logger.log(Level.WARN, "couldnt accept report", e);
+            logger.log(Level.WARN, "any problem with top deleting", e);
+            request.getSession().setAttribute(PARAM_ERROR_MESSAGE, "any problem with top deleting");
         }
         router = new Router(page, Router.RouteType.REDIRECT);
         return router;

@@ -1,9 +1,6 @@
 package com.example.topoftops.controller.command.impl;
 
-import com.example.topoftops.controller.command.Command;
-import com.example.topoftops.controller.command.ConfigurationManager;
-import com.example.topoftops.controller.command.PagePath;
-import com.example.topoftops.controller.command.Router;
+import com.example.topoftops.controller.command.*;
 import com.example.topoftops.entity.User;
 import com.example.topoftops.entity.Item;
 import com.example.topoftops.entity.Role;
@@ -61,13 +58,16 @@ public class ChangeItemPlaceCommand implements Command {
                     page = ConfigurationManager.getProperty(PagePath.TOP);
                 } else {
                     logger.log(Level.ERROR, "user tried change item to stranger top");
-                    page = ConfigurationManager.getProperty(PagePath.INDEX);
+                    request.getSession().setAttribute(PARAM_ERROR_MESSAGE, "user tried change item to stranger top");
+                    page = ConfigurationManager.getProperty(PagePath.ERROR);
                 }
             } else {
-                page = ConfigurationManager.getProperty(PagePath.INDEX);
+                request.getSession().setAttribute(PARAM_ERROR_MESSAGE, "any problem with item additing");
+                page = ConfigurationManager.getProperty(PagePath.ERROR);
             }
         } catch (ServiceException e) {
-            page = ConfigurationManager.getProperty(PagePath.INDEX);
+            request.getSession().setAttribute(PARAM_ERROR_MESSAGE, "any problem with item additing");
+            page = ConfigurationManager.getProperty(PagePath.ERROR);
             logger.log(Level.WARN, e);
         }
         router = new Router(page, Router.RouteType.FORWARD);

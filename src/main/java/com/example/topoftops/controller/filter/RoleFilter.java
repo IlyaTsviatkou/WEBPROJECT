@@ -2,7 +2,6 @@ package com.example.topoftops.controller.filter;
 
 import com.example.topoftops.controller.command.CommandType;
 import com.example.topoftops.controller.command.ConfigurationManager;
-import com.example.topoftops.controller.command.MessageManager;
 import com.example.topoftops.controller.command.PagePath;
 import com.example.topoftops.entity.User;
 import com.example.topoftops.entity.Role;
@@ -37,28 +36,33 @@ public class RoleFilter implements Filter {
 
         String commandName = request.getParameter(PARAM_NAME_COMMAND);
         if (commandName != null) {
-            CommandType commandType = CommandType.valueOf(commandName.toUpperCase());
-            if (!commandType.getAccess().equals(Role.ANY.name())) {
-                if (!(commandType.getAccess().equals(Role.AUTH.name()) && user != null && user.getStatus() == 1)) {
-                    String page = ConfigurationManager.getProperty(PagePath.INDEX);
-                    if (user == null) {
-                        httpResponse.sendRedirect(httpRequest.getContextPath() + page);
-                        request.setAttribute(ATTRIBUTE_ERROR_MESSAGE, MessageManager.getProperty("message.invalidaccess"));
-                        request.setAttribute(PARAM_NAME_COMMAND, "DEFAULT");
-                        return;
-                    } else {
-                        if (user.getRole() != Role.valueOf(commandType.getAccess()).ordinal() || user.getStatus() != 1) {
-                            httpResponse.sendRedirect(httpRequest.getContextPath() + page);
-                            request.setAttribute(ATTRIBUTE_ERROR_MESSAGE, MessageManager.getProperty("message.invalidaccess"));
-                            request.setAttribute(PARAM_NAME_COMMAND, "DEFAULT");
-                            return;
-                        }
-                    }
+            try {
+                CommandType commandType = CommandType.valueOf(commandName.toUpperCase());
+                if (!commandType.getAccess().equals(Role.ANY.name())) {
+                    if (!(commandType.getAccess().equals(Role.AUTH.name()) && user != null && user.getStatus() == 1)) {
+                        if (user == null) {
+                            session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, "Invalid access");
+                            httpResponse.sendRedirect(httpRequest.getContextPath() + ConfigurationManager.getProperty(PagePath.ERROR));
 
+                            return;
+                        } else {
+                            if (user.getRole() != Role.valueOf(commandType.getAccess()).ordinal() || user.getStatus() != 1) {
+                                session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, "Invalid access");
+                                httpResponse.sendRedirect(httpRequest.getContextPath() + ConfigurationManager.getProperty(PagePath.ERROR));
+                                return;
+                            }
+                        }
+
+                    }
                 }
+            } catch (IllegalArgumentException e) {
+                session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, "command not found or wrong!");
+
+                httpResponse.sendRedirect(httpRequest.getContextPath() + ConfigurationManager.getProperty(PagePath.ERROR));
+                return;
             }
         }
-        // session.setAttribute(PARAM_NAME_COMMAND, null);
+
         chain.doFilter(request, response);
     }
 

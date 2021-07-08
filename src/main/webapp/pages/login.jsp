@@ -15,15 +15,20 @@
     <title><fmt:message key="label.login"/></title>
 </head>
 <body>
-<form name="loginForm" action="controller" method="post">
-    <input type="hidden" name="command" value="login"/>
-    <input type="text" name="login" value="" placeholder="<fmt:message key="label.nickname"/>" maxlength="15" required
-           pattern="^(?=[A-Za-z])[A-Za-z\d\_]{5,15}$">
-    <input type="password" name="password" value="" placeholder="<fmt:message key="label.password"/>" maxlength="20"
-           required pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$">
-    <br/>
-    <input type="submit" name="submit" value="<fmt:message key="label.login"/>">
-</form>
+<br/>
+<div style="margin-left: 15px">
+    <form name="loginForm" action="controller" method="post">
+        <input type="hidden" name="command" value="login"/>
+        <input type="text" name="login" value="" placeholder="<fmt:message key="label.nickname"/>" minlength="5"
+               maxlength="15" required
+               pattern="^(?=[A-Za-z])[A-Za-z\d]{5,15}">
+        <input type="password" name="password" value="" placeholder="<fmt:message key="label.password"/>" minlength="8"
+               maxlength="20"
+               required pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$">
+        <br/>
+        <input type="submit" name="submit" value="<fmt:message key="label.login"/>">
+    </form>
+</div>
 <br/>
 </body>
 </html>

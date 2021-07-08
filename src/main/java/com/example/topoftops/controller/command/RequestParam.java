@@ -23,6 +23,7 @@ public class RequestParam {
     public static final String PARAM_NAME_LANGUAGE = "language";
     public static final String PARAM_NAME_LOCALE = "locale";
     public static final String PARAM_NAME_COUNT = "count";
+    public static final String PARAM_ERROR_MESSAGE = "error_message";
 
     private RequestParam() {
     }

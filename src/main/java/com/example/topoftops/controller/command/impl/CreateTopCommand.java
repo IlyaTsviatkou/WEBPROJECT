@@ -1,12 +1,8 @@
 package com.example.topoftops.controller.command.impl;
 
-import com.example.topoftops.controller.command.Command;
-import com.example.topoftops.controller.command.PagePath;
-import com.example.topoftops.controller.command.Router;
+import com.example.topoftops.controller.command.*;
 import com.example.topoftops.entity.User;
-import com.example.topoftops.entity.Item;
 import com.example.topoftops.entity.Top;
-import com.example.topoftops.controller.command.ConfigurationManager;
 import com.example.topoftops.exception.ServiceException;
 import com.example.topoftops.model.service.ItemService;
 import com.example.topoftops.model.service.TopService;
@@ -15,8 +11,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Optional;
 
 import static com.example.topoftops.controller.command.RequestParam.*;
 
@@ -47,22 +41,15 @@ public class CreateTopCommand implements Command {
         String description = request.getParameter(PARAM_NAME_DESCRIPTION);
         String image = (String) request.getAttribute(PARAM_NAME_IMAGE_NAME);
         Top top = new Top(title, description, image, user.getId());
-        page = ConfigurationManager.getProperty(PagePath.INDEX);
+        page = ConfigurationManager.getProperty(PagePath.ERROR);
         try {
             topService.create(top);
-            Optional<Top> optionalTop = topService.findByTitle(title);
-            if (optionalTop.isPresent()) {
-                ArrayList<Item> items;
-                top = (Top) optionalTop.get();
-                items = itemService.findItems(top.getId());
-                top.setItems(items);
-                request.setAttribute(ATTRIBUTE_TOP, top);
-                page = ConfigurationManager.getProperty(PagePath.TOP);
-            }
+            page = ConfigurationManager.getProperty(PagePath.INDEX);
         } catch (ServiceException e) {
             logger.log(Level.WARN, e);
+            request.getSession().setAttribute(PARAM_ERROR_MESSAGE, "any problem with creating top");
         }
-        router = new Router(page, Router.RouteType.FORWARD);
+        router = new Router(page, Router.RouteType.REDIRECT);
         return router;
     }
 }

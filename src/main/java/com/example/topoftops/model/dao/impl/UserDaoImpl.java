@@ -34,7 +34,8 @@ public class UserDaoImpl implements UserDao {
             COLUMN_ROLE + ", " +
             COLUMN_EMAIL + " FROM " +
             USER_TABLE + " WHERE " +
-            COLUMN_LOGIN + " like ?";
+            COLUMN_LOGIN + " like ? AND " +
+            COLUMN_ID + " > 0";
     private static final String SQL_UPDATE_STATUS = "UPDATE " + USER_TABLE + " SET " +
             COLUMN_STATUS + " =?  WHERE " + COLUMN_LOGIN + "=? AND " + COLUMN_STATUS + "=?";
     private static final String SQL_UPDATE_STATUS_BY_ID = "UPDATE " + USER_TABLE + " SET " +

@@ -1,14 +1,11 @@
 package com.example.topoftops.controller.command.impl;
 
-import com.example.topoftops.controller.command.Command;
-import com.example.topoftops.controller.command.PagePath;
-import com.example.topoftops.controller.command.Router;
+import com.example.topoftops.controller.command.*;
 import com.example.topoftops.entity.Item;
 import com.example.topoftops.entity.Top;
 import com.example.topoftops.exception.ServiceException;
 import com.example.topoftops.model.service.ItemService;
 import com.example.topoftops.model.service.TopService;
-import com.example.topoftops.controller.command.ConfigurationManager;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import static com.example.topoftops.controller.command.RequestParam.PARAM_ERROR_MESSAGE;
 import static com.example.topoftops.controller.command.RequestParam.PARAM_NAME_TOP;
 
 /**
@@ -39,7 +37,7 @@ public class ToTopPageCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request) {
         Router router;
-        String page;
+        String page = ConfigurationManager.getProperty(PagePath.ERROR);
         Optional<Top> optionalTop;
         try {
             long topId = Long.parseLong(request.getParameter(PARAM_NAME_TOP));
@@ -53,10 +51,10 @@ public class ToTopPageCommand implements Command {
                 request.setAttribute(ATTRIBUTE_TOP, top);
                 page = ConfigurationManager.getProperty(PagePath.TOP);
             } else {
-                page = ConfigurationManager.getProperty(PagePath.INDEX);
+                request.getSession().setAttribute(PARAM_ERROR_MESSAGE, "any problem with top");
             }
         } catch (ServiceException e) {
-            page = ConfigurationManager.getProperty(PagePath.INDEX);
+            request.getSession().setAttribute(PARAM_ERROR_MESSAGE, "any problem with top");
             logger.log(Level.WARN, e);
         }
         router = new Router(page, Router.RouteType.FORWARD);

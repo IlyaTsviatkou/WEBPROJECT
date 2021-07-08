@@ -26,6 +26,7 @@ import static com.example.topoftops.controller.command.RequestParam.PARAM_NAME_C
 @MultipartConfig
 public class Controller extends HttpServlet {
     private static final Logger logger = LogManager.getLogger();
+    private String ATTRIBUTE_ERROR_MESSAGE = "error_message";
 
     public void init() {
     }

@@ -281,10 +281,10 @@
             <input type="hidden" name="command" value="create_item"/>
             <input type="hidden" name="topid" value="${top.getId()}"/>
             <input type="text" name="title" id="itemTitle" value="" placeholder="<fmt:message key="label.title"/>"
-                   maxlength="15" required pattern="^[a-zA-Zа-яА-Я-\s\d]{1,15}$">
+                   maxlength="15" required pattern="^[a-zA-Zа-яА-Я-\s\d\p{P}]{1,15}">
             <input type="text" name="description" id="itemDescription" value=""
                    placeholder="<fmt:message key="label.description"/>" maxlength="40" required
-                   pattern="^[a-zA-Zа-яА-Я-\s\d]{1,40}$">
+                   pattern="^[a-zA-Zа-яА-Я-\s\d\p{P}]{1,40}">
             <label for="file"><fmt:message key="label.choose_file_to_upload"/></label>
             <input type="file" id="file" name="imageName">
         </form>
@@ -306,10 +306,10 @@
                     <p>
                             <fmt:message key="label.title"/> : <input type="text" id="title${item.getId()}"
                                                                       value="${item.getTitle()}" maxlength="15"
-                                                                      pattern="^[a-zA-Zа-яА-Я-\s\d]{1,15}$"/>
+                                                                      pattern="^[a-zA-Zа-яА-Я-\s\d\p{P}]{1,15}"/>
                     <p><fmt:message key="label.description"/> : <input type="text" id="description${item.getId()}"
                                                                        value="${item.getDescription()} " maxlength="40"
-                                                                       pattern="^[a-zA-Zа-яА-Я-\s\d]{1,40}$"/></p>
+                                                                       pattern="^[a-zA-Zа-яА-Я-\s\d\p{P}]{1,40}"/></p>
                     <div style=" display: flex; flex-direction: row; align-items: flex-start;">
                         <button type="button" id="buttonR1" class="btn btn-outline-dark"
                                 onclick="upItem(${item.getId()})">

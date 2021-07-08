@@ -1,8 +1,6 @@
 package com.example.topoftops.controller.command.impl;
 
-import com.example.topoftops.controller.command.Command;
-import com.example.topoftops.controller.command.PagePath;
-import com.example.topoftops.controller.command.Router;
+import com.example.topoftops.controller.command.*;
 import com.example.topoftops.entity.User;
 import com.example.topoftops.entity.Item;
 import com.example.topoftops.entity.Role;
@@ -10,7 +8,6 @@ import com.example.topoftops.entity.Top;
 import com.example.topoftops.exception.ServiceException;
 import com.example.topoftops.model.service.ItemService;
 import com.example.topoftops.model.service.TopService;
-import com.example.topoftops.controller.command.ConfigurationManager;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -56,16 +53,21 @@ public class CreateItemCommand implements Command {
                 ArrayList<Item> items = itemService.findItems(top.getId());
                 top.setItems(items);
                 page = ConfigurationManager.getProperty(PagePath.TOP);
+                router = new Router(page, Router.RouteType.FORWARD);
             } else {
                 logger.log(Level.ERROR, "any problem with creating item");
-                page = ConfigurationManager.getProperty(PagePath.INDEX);
+                request.getSession().setAttribute(PARAM_ERROR_MESSAGE, "any problem with creating item");
+                page = ConfigurationManager.getProperty(PagePath.ERROR);
+                router = new Router(page, Router.RouteType.REDIRECT);
             }
         } catch (ServiceException e) {
             logger.log(Level.ERROR, e);
-            page = ConfigurationManager.getProperty(PagePath.INDEX);
+            request.getSession().setAttribute(PARAM_ERROR_MESSAGE, "any problem with creating item");
+            page = ConfigurationManager.getProperty(PagePath.ERROR);
+            router = new Router(page, Router.RouteType.REDIRECT);
         }
         request.setAttribute(ATTRIBUTE_TOP, top);
-        router = new Router(page, Router.RouteType.FORWARD);
+
         return router;
     }
 }

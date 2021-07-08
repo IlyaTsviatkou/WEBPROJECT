@@ -38,7 +38,6 @@ public class AddReportAjaxCommand implements AjaxCommand {
             reportService.createReport(report);
         } catch (ServiceException e) {
             logger.log(Level.ERROR, e);
-            request.setAttribute("error_message", "CANT CREATE REPORT, TRY LATER");
         }
     }
 }

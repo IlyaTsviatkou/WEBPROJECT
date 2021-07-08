@@ -238,7 +238,7 @@
         section.innerHTML = "";
         var table = document.createElement('table');
         section.appendChild(table);
-        for (var i = 1; i < jsonObj.length; i++) {
+        for (var i = 0; i < jsonObj.length; i++) {
             var myTr = document.createElement('tr');
             var myTd = document.createElement('td');
             var myTd2 = document.createElement('td');
@@ -250,13 +250,11 @@
             myTd.textContent = jsonObj[i].id
             myTd2.textContent = jsonObj[i].login
             myTd3.textContent = jsonObj[i].email
-            myTd4.textContent = jsonObj[i].rating
             myTd8.innerHTML = '<fmt:message key="label.deleted"/>'
             myDiv.id = 'buttonsC' + jsonObj[i].id
             myTr.appendChild(myTd);
             myTr.appendChild(myTd2);
             myTr.appendChild(myTd3);
-            myTr.appendChild(myTd4);
             if (jsonObj[i].status === 3) {
                 myDiv.appendChild(myTd8)
             }
@@ -373,8 +371,8 @@
 </br>
 </br>
 </br>
-<input type="text" id="login" name="login" value="" placeholder="<fmt:message key="label.nickname"/>" required
-       pattern="^(?=[A-Za-z])[A-Za-z\d\_]{1,}$">
+<input type="text" id="login" name="login" value="" placeholder="<fmt:message key="label.nickname"/>"
+       pattern="^(?=[A-Za-z])[A-Za-z\d]" maxlength="15">
 <input type="submit" name="submit" onclick="getUsers()" value="<fmt:message key="label.top_find"/>">
 
 <input type="submit" name="submit" value="<fmt:message key="label.reports"/>" onclick="getReports()">

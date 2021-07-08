@@ -1,8 +1,6 @@
 package com.example.topoftops.controller.command.impl;
 
-import com.example.topoftops.controller.command.Command;
-import com.example.topoftops.controller.command.PagePath;
-import com.example.topoftops.controller.command.Router;
+import com.example.topoftops.controller.command.*;
 import com.example.topoftops.entity.User;
 import com.example.topoftops.entity.Item;
 import com.example.topoftops.entity.Role;
@@ -10,7 +8,6 @@ import com.example.topoftops.entity.Top;
 import com.example.topoftops.exception.ServiceException;
 import com.example.topoftops.model.service.ItemService;
 import com.example.topoftops.model.service.TopService;
-import com.example.topoftops.controller.command.ConfigurationManager;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -53,11 +50,14 @@ public class DeleteItemCommand implements Command {
                 top.setItems(items);
             } else {
                 logger.log(Level.ERROR, "user tried delete item to stranger top");
-                page = ConfigurationManager.getProperty(PagePath.INDEX);
+                request.getSession().setAttribute(PARAM_ERROR_MESSAGE, "user tried delete item to stranger top");
+                page = ConfigurationManager.getProperty(PagePath.ERROR);
+
             }
         } catch (ServiceException e) {
             logger.log(Level.ERROR, e);
-            page = ConfigurationManager.getProperty(PagePath.INDEX);
+            request.getSession().setAttribute(PARAM_ERROR_MESSAGE,"any problem with deleting item");
+            page = ConfigurationManager.getProperty(PagePath.ERROR);
         }
         request.setAttribute(ATTRIBUTE_TOP, top);
         router = new Router(page, Router.RouteType.FORWARD);

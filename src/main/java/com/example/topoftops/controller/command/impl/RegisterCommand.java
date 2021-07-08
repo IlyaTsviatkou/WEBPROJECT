@@ -7,7 +7,6 @@ import com.example.topoftops.entity.User;
 import com.example.topoftops.exception.ServiceException;
 import com.example.topoftops.model.service.UserService;
 import com.example.topoftops.controller.command.ConfigurationManager;
-import com.example.topoftops.controller.command.MessageManager;
 import com.example.topoftops.util.Encryptor;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -48,7 +47,6 @@ public class RegisterCommand implements Command {
         boolean result = false;
         try {
             result = userService.register(user);
-
             if (result) {
                 Optional<User> userOptional = userService.login(login, pass);
                 user = userOptional.get();
@@ -61,16 +59,17 @@ public class RegisterCommand implements Command {
                 if (!isSent) {
                     logger.log(Level.WARN, "email is not valid" + user.getEmail());
                 }
-                page = ConfigurationManager.getProperty(PagePath.PROFILE);
-            } else {
-                request.setAttribute(ATTRIBUTE_NAME_ERROR_LOGIN, MessageManager.getProperty("message.errorlogin"));
                 page = ConfigurationManager.getProperty(PagePath.INDEX);
+            } else {
+                request.getSession().setAttribute(PARAM_ERROR_MESSAGE,"Incorrect input data.");
+                page = ConfigurationManager.getProperty(PagePath.ERROR);
             }
         } catch (ServiceException e) {
             logger.log(Level.ERROR, e);
-            page = ConfigurationManager.getProperty(PagePath.INDEX);
+            request.getSession().setAttribute(PARAM_ERROR_MESSAGE, "any problem with registration");
+            page = ConfigurationManager.getProperty(PagePath.ERROR);
         }
-        router = new Router(page, Router.RouteType.FORWARD);
+        router = new Router(page, Router.RouteType.REDIRECT);
         return router;
     }
 }

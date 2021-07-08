@@ -34,7 +34,6 @@ public enum CommandType {
     TO_PROFILE_PAGE("AUTH"),
     SEARCH_TOPS("ANY"),
     SEARCH_TOPS_RATING("ANY"),
-    CREATE_ITEM_AJAX("AUTH"),
     CHANGE_ITEM_PLACE("AUTH"),
     UPDATE_ITEM("AUTH"),
     DELETE_TOP("AUTH");
@@ -42,7 +41,7 @@ public enum CommandType {
     private String access;
 
 
-    private CommandType(String access) {
+    CommandType(String access) {
         this.access = access;
     }
 

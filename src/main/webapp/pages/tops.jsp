@@ -126,7 +126,7 @@
 </head>
 <body>
 
-<div style="margin-left: 20%">
+<div style="margin-left: 20%; margin-top: 20px">
     <input class="form-control mr-sm-2" id="search" type="text" placeholder="<fmt:message key="label.search"/>"
            maxlength="15" pattern="^[a-zA-Zа-яА-Я-\\s]{0,15}$" style="width: 900px">
     <div style="display: flex; margin-top:10px;">
@@ -141,7 +141,7 @@
             </button>
         </div>
     </div>
-    <div id="tops" class="row mb-3" style="width: 75% ">
+    <div id="tops" class="row mb-3" style="width: 75%; margin-top: 10px">
         <c:forEach var="top" items="${tops}" varStatus="status">
             <div class="col-3">
                 <form action="controller" method="post" id="${top.getId()}" name="${top.getId()}">

@@ -41,7 +41,7 @@ public class UpdateItemCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request) {
         Router router;
-        String page;
+        String page = ConfigurationManager.getProperty(PagePath.ERROR);
         Optional<Top> optionalTop;
         try {
             long itemId = Long.parseLong(request.getParameter(PARAM_NAME_ITEM));
@@ -64,13 +64,14 @@ public class UpdateItemCommand implements Command {
                     page = ConfigurationManager.getProperty(PagePath.TOP);
                 } else {
                     logger.log(Level.ERROR, "user tried change item to stranger top");
-                    page = ConfigurationManager.getProperty(PagePath.INDEX);
+                    request.getSession().setAttribute(PARAM_ERROR_MESSAGE, "user tried change item to stranger top");
                 }
             } else {
-                page = ConfigurationManager.getProperty(PagePath.INDEX);
+                request.getSession().setAttribute(PARAM_ERROR_MESSAGE, "any problem with updating item");
             }
         } catch (ServiceException e) {
-            page = ConfigurationManager.getProperty(PagePath.INDEX);
+            request.getSession().setAttribute(PARAM_ERROR_MESSAGE, "any problem with updating item");
+
             logger.log(Level.WARN, e);
         }
         router = new Router(page, Router.RouteType.FORWARD);
