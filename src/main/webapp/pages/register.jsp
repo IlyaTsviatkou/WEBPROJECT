@@ -16,21 +16,27 @@
 </head>
 <body>
 <br/>
-<div style="margin-left: 15px">
+<div class="row" style="margin-left: 5%">
     <form name="registerForm" action="controller" method="post">
+        <div class="col" style="margin-bottom: 10px">
         <input type="hidden" name="command" value="register"/>
-        <input type="text" name="login" value="" placeholder="<fmt:message key="label.nickname"/>" minlength="5"
+        <input type="text" name="login" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" style="width: 250px" value="" placeholder="<fmt:message key="label.nickname"/>" minlength="5"
                maxlength="15"
                required pattern="^(?=[A-Za-z])[A-Za-z\d]{5,15}">
-        <input type="password" name="password" value="" placeholder="<fmt:message key="label.password"/>" minlength="8"
+        </div>
+        <div class="col" style="margin-bottom: 10px">
+        <input type="password" name="password" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" style="width: 250px" value="" placeholder="<fmt:message key="label.password"/>" minlength="8"
                maxlength="20"
                required pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}">
-        <input type="email" name="email" value="" placeholder="<fmt:message key="label.email"/>" minlength="5"
+        </div>
+        <div class="col" style="margin-bottom: 10px">
+        <input type="email" name="email" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" style="width: 250px" value="" placeholder="<fmt:message key="label.email"/>" minlength="5"
                maxlength="30"
                required>
-
-        <br/>
-        <input type="submit" name="submit" value="<fmt:message key="label.register"/>">
+        </div>
+        <div class="col">
+        <input type="submit" class="btn btn-outline-dark" name="submit" value="<fmt:message key="label.register"/>">
+        </div>
     </form>
 </div>
 </body>

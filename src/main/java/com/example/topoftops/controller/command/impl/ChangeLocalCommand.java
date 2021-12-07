@@ -21,6 +21,7 @@ public class ChangeLocalCommand implements Command {
     private static final String RUS_FORMAT = "ru_RU";
     private static final String ENG = "eng";
     private static final String ENG_FORMAT = "en_US";
+    private static final String UNKNOWN_FORMAT = "UNKNOWN";
     private static final String ATTRIBUTE_LOCALE = "locale";
 
     public ChangeLocalCommand() {
@@ -31,12 +32,18 @@ public class ChangeLocalCommand implements Command {
         Router router;
         String page = ConfigurationManager.getProperty(PagePath.INDEX);
         HttpSession session = request.getSession();
-        String lang = request.getParameter(PARAM_NAME_LANGUAGE);
-        if (lang.equals(RUS)) {
-            session.setAttribute(ATTRIBUTE_LOCALE, RUS_FORMAT);
-        } else if (lang.equals(ENG)) {
+        String lang = session.getAttribute(ATTRIBUTE_LOCALE).toString();
+        if (lang.equals(RUS_FORMAT) || lang.equals(UNKNOWN_FORMAT)) {
             session.setAttribute(ATTRIBUTE_LOCALE, ENG_FORMAT);
+        } else if (lang.equals(ENG_FORMAT)) {
+            session.setAttribute(ATTRIBUTE_LOCALE, RUS_FORMAT);
         }
+//        String lang = request.getParameter(PARAM_NAME_LANGUAGE);
+//        if (lang.equals(RUS)) {
+//            session.setAttribute(ATTRIBUTE_LOCALE, RUS_FORMAT);
+//        } else if (lang.equals(ENG)) {
+//            session.setAttribute(ATTRIBUTE_LOCALE, ENG_FORMAT);
+//        }
         router = new Router(page, Router.RouteType.REDIRECT);
         return router;
     }

@@ -16,17 +16,23 @@
 </head>
 <body>
 <br/>
-<div style="margin-left: 15px">
+<div class="row" style="margin-left: 5%">
     <form name="loginForm" action="controller" method="post">
-        <input type="hidden" name="command" value="login"/>
-        <input type="text" name="login" value="" placeholder="<fmt:message key="label.nickname"/>" minlength="5"
-               maxlength="15" required
-               pattern="^(?=[A-Za-z])[A-Za-z\d]{5,15}">
-        <input type="password" name="password" value="" placeholder="<fmt:message key="label.password"/>" minlength="8"
-               maxlength="20"
-               required pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$">
-        <br/>
-        <input type="submit" name="submit" value="<fmt:message key="label.login"/>">
+        <div class="col" style="margin-bottom: 10px">
+            <input type="hidden" name="command" value="login"/>
+            <input type="text" name="login" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" style="width: 250px" value="" placeholder="<fmt:message key="label.nickname"/>" minlength="5"
+                   maxlength="15" required
+                   pattern="^(?=[A-Za-z])[A-Za-z\d]{5,15}">
+        </div>
+        <div class="col" style="margin-bottom: 10px">
+            <input type="password" name="password" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" style="width: 250px" value="" placeholder="<fmt:message key="label.password"/>"
+                   minlength="8"
+                   maxlength="20"
+                   required pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$">
+        </div>
+        <div class="col">
+            <input type="submit" class="btn btn-outline-dark" name="submit" value="<fmt:message key="label.login"/>">
+        </div>
     </form>
 </div>
 <br/>

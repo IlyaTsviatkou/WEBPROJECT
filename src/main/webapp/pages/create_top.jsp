@@ -16,16 +16,26 @@
 </head>
 <body>
 <br/>
+<div class="row">
 <form name="createTopForm" action="upload" method="post" enctype="multipart/form-data">
+    <div class=col style="margin-bottom: 10px;margin-left: 10px">
     <input type="hidden" name="command" value="create_top"/>
     <input type="text" name="title" value="" placeholder="<fmt:message key="label.title"/>" maxlength="45" required
            pattern="^[a-zA-Zа-яА-Я-\s\d\p{P}]{1,45}$">
+    </div>
+    <div class=col style="margin-bottom: 10px;margin-left: 10px">
     <input type="text" name="description" value="" placeholder="<fmt:message key="label.description"/>" maxlength="200"
            pattern="^[a-zA-Zа-яА-Я-\s\d\p{P}]{1,200}$">
+    </div>
+    <div class=col style="margin-bottom: 10px;margin-left: 10px">
     <label for="file"><fmt:message key="label.choose_file_to_upload"/></label>
     <input type="file" value="<fmt:message key="label.upload"/>" id="file" name="imageName">
     <br/>
-    <input type="submit" name="submit" value="<fmt:message key="label.create"/>">
+    </div>
+    <div class=col style="margin-bottom: 10px;margin-left: 10px">
+    <input type="submit" class="btn btn-outline-dark" name="submit" value="<fmt:message key="label.create"/>">
+    </div>
 </form>
+</div>
 </body>
 </html>

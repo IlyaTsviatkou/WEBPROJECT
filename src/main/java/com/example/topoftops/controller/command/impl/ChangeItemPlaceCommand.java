@@ -41,6 +41,7 @@ public class ChangeItemPlaceCommand implements Command {
         String page;
         Optional<Top> optionalTop;
         try {
+
             long itemId = Long.parseLong(request.getParameter(PARAM_NAME_ITEM));
             int count = Integer.parseInt(request.getParameter(PARAM_NAME_COUNT));
             long topId = Long.parseLong(request.getParameter(PARAM_NAME_TOP));
